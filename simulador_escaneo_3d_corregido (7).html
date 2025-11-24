@@ -1,0 +1,2608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador 3D - Sistema de Escaneo con Brazo Articulado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        #container {
+            display: flex;
+            height: 100vh;
+        }
+
+        #canvas-container {
+            flex: 1;
+            position: relative;
+        }
+
+        #control-panel {
+            width: 350px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+            font-size: 14px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .value-display {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            margin-left: 10px;
+            font-weight: 600;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .mode-selector button {
+            flex: 1;
+        }
+
+        .status-box {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 15px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-size: 13px;
+        }
+
+        .status-label {
+            font-weight: 600;
+            color: #1976d2;
+        }
+
+        .status-value {
+            color: #333;
+            font-family: 'Courier New', monospace;
+        }
+
+        #info-display {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            pointer-events: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .slider-container {
+            position: relative;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #764ba2;
+            transform: scale(1.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+
+        .capture-indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(102, 126, 234, 0.9);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            animation: slideInFromBottom 0.3s ease-out;
+        }
+
+        @keyframes slideInFromBottom {
+            from { 
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+
+        /* Panel de Vista de Cámara */
+        #camera-view-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 320px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: none;
+            z-index: 100;
+        }
+
+        #camera-view-panel.active {
+            display: block;
+        }
+
+        .camera-view-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .camera-view-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+            transition: background 0.2s;
+        }
+
+        .camera-view-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        #camera-view-canvas {
+            width: 100%;
+            height: 240px;
+            display: block;
+            background: #1a1a1a;
+        }
+
+        .camera-view-info {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            font-size: 12px;
+            color: #555;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .camera-zoom-controls {
+            padding: 10px 15px;
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .camera-zoom-controls label {
+            font-size: 12px;
+            color: #555;
+            font-weight: 600;
+            min-width: 45px;
+        }
+
+        .camera-zoom-controls input[type="range"] {
+            flex: 1;
+            height: 4px;
+            border-radius: 2px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .camera-zoom-controls input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .camera-zoom-controls input[type="range"]::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+
+        .camera-zoom-value {
+            font-size: 11px;
+            color: white;
+            background: #667eea;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            min-width: 35px;
+            text-align: center;
+        }
+
+        .toggle-camera-view-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 99;
+        }
+
+        .toggle-camera-view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+        }
+
+        .toggle-camera-view-btn.active {
+            background: #28a745;
+        }
+
+        /* Tooltips de ayuda */
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+        }
+
+        [data-tooltip]::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            line-height: 1.5;
+            z-index: 10000;
+            pointer-events: none;
+            white-space: normal;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            font-weight: normal;
+            max-width: 320px;
+            text-align: left;
+            word-wrap: break-word;
+        }
+
+        [data-tooltip]:hover::before {
+            opacity: 1;
+        }
+
+        /* Tooltip arriba (por defecto) */
+        [data-tooltip]:not([data-tooltip-pos])::before,
+        [data-tooltip][data-tooltip-pos="top"]::before {
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        [data-tooltip]:not([data-tooltip-pos]):hover::before,
+        [data-tooltip][data-tooltip-pos="top"]:hover::before {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Flecha del tooltip arriba */
+        [data-tooltip]:not([data-tooltip-pos])::after,
+        [data-tooltip][data-tooltip-pos="top"]::after {
+            content: '';
+            position: absolute;
+            bottom: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%);
+            border-style: solid;
+            border-width: 6px 6px 0 6px;
+            border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10000;
+        }
+
+        [data-tooltip]:not([data-tooltip-pos]):hover::after,
+        [data-tooltip][data-tooltip-pos="top"]:hover::after {
+            opacity: 1;
+        }
+
+        /* Tooltip abajo */
+        [data-tooltip][data-tooltip-pos="bottom"]::before {
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        [data-tooltip][data-tooltip-pos="bottom"]:hover::before {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        [data-tooltip][data-tooltip-pos="bottom"]::after {
+            content: '';
+            position: absolute;
+            top: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%);
+            border-style: solid;
+            border-width: 0 6px 6px 6px;
+            border-color: transparent transparent rgba(0, 0, 0, 0.9) transparent;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10000;
+        }
+
+        [data-tooltip][data-tooltip-pos="bottom"]:hover::after {
+            opacity: 1;
+        }
+
+        /* Tooltip derecha */
+        [data-tooltip][data-tooltip-pos="right"]::before {
+            left: calc(100% + 8px);
+            top: 50%;
+            transform: translateY(-50%) translateX(-5px);
+        }
+
+        [data-tooltip][data-tooltip-pos="right"]:hover::before {
+            transform: translateY(-50%) translateX(0);
+        }
+
+        [data-tooltip][data-tooltip-pos="right"]::after {
+            content: '';
+            position: absolute;
+            left: calc(100% + 2px);
+            top: 50%;
+            transform: translateY(-50%);
+            border-style: solid;
+            border-width: 6px 6px 6px 0;
+            border-color: transparent rgba(0, 0, 0, 0.9) transparent transparent;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10000;
+        }
+
+        [data-tooltip][data-tooltip-pos="right"]:hover::after {
+            opacity: 1;
+        }
+
+        /* Tooltip izquierda */
+        [data-tooltip][data-tooltip-pos="left"]::before {
+            right: calc(100% + 8px);
+            top: 50%;
+            transform: translateY(-50%) translateX(5px);
+        }
+
+        [data-tooltip][data-tooltip-pos="left"]:hover::before {
+            transform: translateY(-50%) translateX(0);
+        }
+
+        [data-tooltip][data-tooltip-pos="left"]::after {
+            content: '';
+            position: absolute;
+            right: calc(100% + 2px);
+            top: 50%;
+            transform: translateY(-50%);
+            border-style: solid;
+            border-width: 6px 0 6px 6px;
+            border-color: transparent transparent transparent rgba(0, 0, 0, 0.9);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10000;
+        }
+
+        [data-tooltip][data-tooltip-pos="left"]:hover::after {
+            opacity: 1;
+        }
+
+        /* Tooltips multilinea */
+        [data-tooltip-multiline]::before {
+            white-space: normal;
+            max-width: 250px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="canvas-container">
+            <div id="info-display"></div>
+            <div id="capture-indicator" class="capture-indicator">📸 Captura realizada</div>
+            
+            <!-- Botón para activar/desactivar vista de cámara -->
+            <button id="toggle-camera-view-btn" class="toggle-camera-view-btn" 
+                    data-tooltip="Activa/desactiva la vista en tiempo real desde la cámara del brazo robótico"
+                    data-tooltip-pos="left">
+                📹 Vista de Cámara
+            </button>
+            
+            <!-- Panel de Vista de Cámara -->
+            <div id="camera-view-panel">
+                <div class="camera-view-header">
+                    <span>📹 Vista desde la Cámara</span>
+                    <button class="camera-view-close" id="close-camera-view"
+                            data-tooltip="Cierra el panel de vista de cámara"
+                            data-tooltip-pos="left">✕</button>
+                </div>
+                <canvas id="camera-view-canvas"></canvas>
+                <div class="camera-zoom-controls">
+                    <label>🔍 Zoom:</label>
+                    <input type="range" id="camera-zoom-slider" min="1" max="3" value="1" step="0.1"
+                           data-tooltip="Ajusta el nivel de zoom de la cámara virtual (1x-3x)"
+                           data-tooltip-pos="top">
+                    <span id="camera-zoom-value" class="camera-zoom-value">1.0x</span>
+                </div>
+                <div class="camera-view-info">
+                    Vista en tiempo real desde la perspectiva de la cámara del brazo robótico
+                </div>
+            </div>
+        </div>
+        <div id="control-panel">
+            <h1>🤖 Simulador de Escaneo 3D</h1>
+            
+            <div class="mode-selector">
+                <button id="manual-mode-btn" class="btn-primary" 
+                        data-tooltip="Controla el brazo manualmente con sliders de rotación y nivel"
+                        data-tooltip-pos="bottom">Manual</button>
+                <button id="auto-mode-btn" class="btn-secondary"
+                        data-tooltip="Inicia un escaneo automático completo del objeto en 5 niveles"
+                        data-tooltip-pos="bottom">Automático</button>
+            </div>
+
+            <h2>⚙️ Configuración del Brazo</h2>
+            <div class="control-group">
+                <label>Longitud Eslabón 1 (Base-Codo): <span id="link1-value" class="value-display">15 cm</span></label>
+                <input type="number" id="link1-length" min="10" max="25" value="15" step="0.5"
+                       data-tooltip="Longitud del primer eslabón del brazo (10-25 cm)"
+                       data-tooltip-pos="right">
+                
+                <label style="margin-top: 10px;">Longitud Eslabón 2 (Codo-Cámara): <span id="link2-value" class="value-display">20 cm</span></label>
+                <input type="number" id="link2-length" min="15" max="30" value="20" step="0.5"
+                       data-tooltip="Longitud del segundo eslabón del brazo (15-30 cm)"
+                       data-tooltip-pos="right">
+                
+                <button id="apply-lengths-btn" class="btn-success" style="margin-top: 10px;"
+                        data-tooltip="Aplica las nuevas longitudes y reconstruye el brazo robótico"
+                        data-tooltip-pos="bottom">Aplicar Cambios</button>
+            </div>
+
+            <!-- Controles Manuales -->
+            <div id="manual-controls">
+                <h2>🎮 Control Manual</h2>
+                <div class="control-group">
+                    <label>Rotación Base: <span id="base-rotation-value" class="value-display">0°</span></label>
+                    <div class="slider-container">
+                        <input type="range" id="base-rotation" min="0" max="360" value="0" step="22.5"
+                               data-tooltip="Rota la base circular sobre la que está el objeto (0-360°)"
+                               data-tooltip-pos="top">
+                    </div>
+
+                    <label style="margin-top: 15px;">Nivel del Rail: <span id="rail-level-value" class="value-display">Nivel 5 (90°)</span></label>
+                    <div class="slider-container">
+                        <input type="range" id="rail-level" min="1" max="5" value="5" step="1"
+                               data-tooltip="Ajusta la altura del brazo en el rail guía (5 niveles disponibles)"
+                               data-tooltip-pos="top">
+                    </div>
+
+                    <button id="capture-manual-btn" class="btn-success" style="margin-top: 15px;"
+                            data-tooltip="Captura una foto desde la posición actual de la cámara"
+                            data-tooltip-pos="bottom">📷 Capturar Foto</button>
+                </div>
+            </div>
+
+            <!-- Controles Automáticos -->
+            <div id="auto-controls" style="display: none;">
+                <h2>⚡ Control Automático</h2>
+                <div class="control-group">
+                    <label>Velocidad de Simulación:</label>
+                    <select id="simulation-speed" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;"
+                            data-tooltip="Ajusta la velocidad del escaneo automático"
+                            data-tooltip-pos="right">
+                        <option value="0.5">Muy Lenta (0.5x)</option>
+                        <option value="1" selected>Normal (1x)</option>
+                        <option value="2">Rápida (2x)</option>
+                        <option value="3">Muy Rápida (3x)</option>
+                    </select>
+
+                    <button id="start-scan-btn" class="btn-primary" style="margin-top: 15px;"
+                            data-tooltip="Inicia el escaneo automático desde el nivel 1 hasta el nivel 5"
+                            data-tooltip-pos="bottom">▶️ Iniciar Escaneo</button>
+                    <button id="pause-scan-btn" class="btn-secondary" style="display: none;"
+                            data-tooltip="Pausa el escaneo en la posición actual"
+                            data-tooltip-pos="bottom">⏸️ Pausar</button>
+                    <button id="resume-scan-btn" class="btn-success" style="display: none;"
+                            data-tooltip="Continúa el escaneo desde donde se pausó"
+                            data-tooltip-pos="bottom">▶️ Continuar</button>
+                    <button id="stop-scan-btn" class="btn-danger"
+                            data-tooltip="Detiene el escaneo y regresa al estado inicial"
+                            data-tooltip-pos="bottom">⏹️ Detener</button>
+
+                    <div class="progress-bar" style="margin-top: 15px;">
+                        <div id="progress-fill" class="progress-fill">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2>📊 Estado del Sistema</h2>
+            <div class="status-box">
+                <div class="status-item">
+                    <span class="status-label">Capturas Totales:</span>
+                    <span id="total-captures" class="status-value">0</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Nivel Actual:</span>
+                    <span id="current-level" class="status-value">5</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Ángulo Base:</span>
+                    <span id="current-base-angle" class="status-value">0°</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Ángulo Codo:</span>
+                    <span id="elbow-angle-display" class="status-value">0°</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Modo:</span>
+                    <span id="current-mode" class="status-value">Manual</span>
+                </div>
+            </div>
+
+            <h2>📦 Objeto a Escanear</h2>
+            <div class="control-group">
+                <label>Cargar Modelo 3D:</label>
+                <input type="file" id="model-file-input" accept=".obj,.stl,.gltf,.glb" 
+                       style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-top: 5px;"
+                       data-tooltip="Carga tu propio modelo 3D para escanearlo (OBJ, STL, GLTF, GLB)"
+                       data-tooltip-pos="right">
+                
+                <label style="margin-top: 15px;">Escala del Modelo: <span id="model-scale-value" class="value-display">1.0x</span></label>
+                <div class="slider-container">
+                    <input type="range" id="model-scale-slider" min="0.1" max="3" value="1" step="0.1"
+                           data-tooltip="Ajusta el tamaño del modelo cargado (0.1x a 3x)"
+                           data-tooltip-pos="top">
+                </div>
+                
+                <button id="remove-model-btn" class="btn-secondary" style="margin-top: 10px;"
+                        data-tooltip="Elimina el modelo actual y restaura la taza por defecto"
+                        data-tooltip-pos="bottom">🗑️ Restaurar Taza Original</button>
+                
+                <div class="warning" style="margin-top: 10px;">
+                    💡 Formatos soportados: OBJ, STL, GLTF/GLB
+                </div>
+            </div>
+
+            <button id="reset-btn" class="btn-danger" style="margin-top: 20px;"
+                    data-tooltip="Reinicia el sistema a su estado inicial y elimina todas las capturas"
+                    data-tooltip-pos="bottom">🔄 Resetear Sistema</button>
+            
+            <div class="warning" style="margin-top: 15px;">
+                ⚠️ El brazo se ajustará automáticamente para mantener la cámara en el rail guiador.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    
+    <script>
+        // Variables globales
+        let scene, camera, renderer, controls;
+        let rotatingBase, guidingRail, armBase, link1, link2, cameraHead, elbowJoint;
+        let cameraLens = null; // Lente de la cámara
+        let capturePoints = [];
+        let isAutoMode = false;
+        let isScanning = false;
+        let isPaused = false;
+        let totalCaptures = 0;
+        let isFirstLoad = true; // Para la demo inicial
+        let demoTimeout = null;
+        let scanningObject = null; // Objeto a escanear (taza o modelo personalizado)
+        let customModel = null; // Modelo 3D cargado por el usuario
+        let modelScale = 1.0; // Escala del modelo
+        
+        // Variables para la vista de cámara virtual
+        let virtualCamera = null; // Cámara que simula la perspectiva del cabezal
+        let cameraViewRenderer = null; // Renderer para la vista de cámara
+        let cameraViewActive = false; // Estado de la vista de cámara
+        let cameraZoom = 1.0; // Nivel de zoom de la cámara virtual (1.0 = normal, 2.0 = 2x zoom)
+        
+        // Variables para animaciones suaves
+        let targetBaseRotation = 0;
+        let currentBaseRotation = 0;
+        let targetArmPosition = {
+            link1: { x: 0, y: 0, z: 0, rotation: 0 },
+            link2: { x: 0, y: 0, z: 0, rotation: 0 },
+            camera: { x: 0, y: 0, z: 0, rotation: 0 },
+            elbow: { x: 0, y: 0, z: 0 }
+        };
+        let currentArmPosition = {
+            link1: { x: 0, y: 0, z: 0, rotation: 0 },
+            link2: { x: 0, y: 0, z: 0, rotation: 0 },
+            camera: { x: 0, y: 0, z: 0, rotation: 0 },
+            elbow: { x: 0, y: 0, z: 0 }
+        };
+        
+        // Configuración del sistema
+        const CONFIG = {
+            baseRadius: 15, // cm
+            railRadius: 17, // cm
+            scanAreaRadius: 15, // cm
+            railHeightOffset: 4, // cm - elevación del rail sobre la base (aumentado de 2 a 4)
+            armBaseOffset: 5, // cm - distancia hacia atrás del rail
+            link1Length: 15, // cm (ajustable)
+            link2Length: 20, // cm (ajustable)
+            captureIncrement: 22.5, // grados por captura
+            railLevels: [0, 22.5, 45, 67.5, 90], // ángulos de los 5 niveles
+            currentLevel: 5, // empezamos en nivel 5 (90°)
+            currentBaseRotation: 0,
+            simulationSpeed: 1,
+            animationSpeed: 0.15 // Velocidad de interpolación (más bajo = más suave)
+        };
+
+        // Función para eliminar COMPLETAMENTE todos los eslabones antiguos
+        function removeAllLinks() {
+            // Array para almacenar objetos a eliminar
+            const toRemove = [];
+            
+            // Recorrer TODA la escena
+            scene.children.forEach(child => {
+                if (child.name === "LINK_1" || child.name === "LINK_2") {
+                    toRemove.push(child);
+                }
+            });
+            
+            // Eliminar cada objeto encontrado
+            toRemove.forEach(obj => {
+                scene.remove(obj);
+                if (obj.geometry) {
+                    obj.geometry.dispose();
+                }
+                if (obj.material) {
+                    if (obj.material.map) obj.material.map.dispose();
+                    obj.material.dispose();
+                }
+            });
+            
+            // También intentar eliminar por referencia directa
+            if (link1 && link1.parent) {
+                link1.parent.remove(link1);
+                if (link1.geometry) link1.geometry.dispose();
+                if (link1.material) link1.material.dispose();
+            }
+            if (link2 && link2.parent) {
+                link2.parent.remove(link2);
+                if (link2.geometry) link2.geometry.dispose();
+                if (link2.material) link2.material.dispose();
+            }
+            
+            // Limpiar referencias
+            link1 = null;
+            link2 = null;
+            
+            // Forzar limpieza de memoria
+            if (renderer) {
+                renderer.renderLists.dispose();
+            }
+            
+            console.log('Todos los eslabones han sido eliminados. Objetos removidos:', toRemove.length);
+        }
+
+        // Función para remover el objeto actual de escaneo
+        function removeCurrentObject() {
+            if (scanningObject) {
+                if (scanningObject.parent) {
+                    scanningObject.parent.remove(scanningObject);
+                }
+                // Limpiar geometrías y materiales
+                scanningObject.traverse((child) => {
+                    if (child.geometry) child.geometry.dispose();
+                    if (child.material) {
+                        if (Array.isArray(child.material)) {
+                            child.material.forEach(mat => {
+                                if (mat.map) mat.map.dispose();
+                                mat.dispose();
+                            });
+                        } else {
+                            if (child.material.map) child.material.map.dispose();
+                            child.material.dispose();
+                        }
+                    }
+                });
+                scanningObject = null;
+            }
+            if (customModel) {
+                customModel = null;
+            }
+        }
+
+        // Función para cargar modelo 3D
+        function loadCustomModel(file) {
+            const fileName = file.name.toLowerCase();
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const contents = e.target.result;
+                
+                // Remover objeto actual
+                removeCurrentObject();
+                
+                // Determinar tipo de archivo y cargar
+                if (fileName.endsWith('.obj')) {
+                    loadOBJModel(contents);
+                } else if (fileName.endsWith('.stl')) {
+                    // STL puede ser ASCII o binario, intentar ambos
+                    loadSTLModel(contents, file);
+                } else if (fileName.endsWith('.gltf') || fileName.endsWith('.glb')) {
+                    loadGLTFModel(contents, fileName.endsWith('.glb'));
+                }
+            };
+            
+            // Para STL, leer como ArrayBuffer para soportar binarios
+            if (fileName.endsWith('.stl')) {
+                reader.readAsArrayBuffer(file);
+            } else if (fileName.endsWith('.glb')) {
+                reader.readAsArrayBuffer(file);
+            } else {
+                reader.readAsText(file);
+            }
+        }
+
+        // Cargar modelo OBJ
+        function loadOBJModel(objText) {
+            const lines = objText.split('\n');
+            const vertices = [];
+            const faces = [];
+            
+            lines.forEach(line => {
+                const parts = line.trim().split(/\s+/);
+                if (parts[0] === 'v') {
+                    vertices.push(
+                        parseFloat(parts[1]),
+                        parseFloat(parts[2]),
+                        parseFloat(parts[3])
+                    );
+                } else if (parts[0] === 'f') {
+                    const face = [];
+                    for (let i = 1; i < parts.length; i++) {
+                        const vertexIndex = parseInt(parts[i].split('/')[0]) - 1;
+                        face.push(vertexIndex);
+                    }
+                    if (face.length >= 3) {
+                        faces.push(face[0], face[1], face[2]);
+                        if (face.length === 4) {
+                            faces.push(face[0], face[2], face[3]);
+                        }
+                    }
+                }
+            });
+            
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setIndex(faces);
+            geometry.computeVertexNormals();
+            
+            createModelFromGeometry(geometry);
+        }
+
+        // Cargar modelo STL (ASCII o Binario)
+        function loadSTLModel(arrayBuffer, file) {
+            try {
+                // Usar STLLoader de Three.js para manejar ambos formatos
+                const loader = new THREE.STLLoader();
+                
+                // Convertir ArrayBuffer a geometría
+                const geometry = loader.parse(arrayBuffer);
+                
+                if (geometry && geometry.attributes && geometry.attributes.position) {
+                    geometry.computeVertexNormals();
+                    createModelFromGeometry(geometry);
+                    console.log('Archivo STL cargado exitosamente');
+                } else {
+                    throw new Error('Geometría STL inválida');
+                }
+            } catch (error) {
+                console.error('Error al cargar STL:', error);
+                alert('❌ Error al cargar el archivo STL.\n\nAsegúrate de que sea un archivo STL válido (ASCII o binario).');
+                restoreOriginalObject();
+            }
+        }
+
+        // Cargar modelo GLTF/GLB
+        function loadGLTFModel(contents, isBinary) {
+            alert('Para soporte completo de GLTF/GLB, se requiere el GLTFLoader.\n\nPor ahora, usa formatos OBJ o STL.\n\nSi necesitas GLTF, puedes convertir tu modelo a OBJ usando herramientas online.');
+        }
+
+        // Crear modelo desde geometría
+        function createModelFromGeometry(geometry) {
+            // Centrar geometría y calcular bounding box
+            geometry.computeBoundingBox();
+            const boundingBox = geometry.boundingBox;
+            const center = new THREE.Vector3();
+            boundingBox.getCenter(center);
+            
+            // Obtener el tamaño del modelo
+            const size = new THREE.Vector3();
+            boundingBox.getSize(size);
+            
+            // Centrar el modelo horizontalmente (X, Z) pero mantener la base en el origen Y
+            // Solo trasladar en X y Z para centrar, y en Y para que la parte inferior quede en y=0
+            geometry.translate(-center.x, -boundingBox.min.y, -center.z);
+            
+            // Recalcular bounding box después de la traslación
+            geometry.computeBoundingBox();
+            const newBoundingBox = geometry.boundingBox;
+            const newSize = new THREE.Vector3();
+            newBoundingBox.getSize(newSize);
+            
+            // Calcular escala para que quepa en el área (máximo 8cm)
+            const maxDim = Math.max(newSize.x, newSize.y, newSize.z);
+            const autoScale = 8 / maxDim;
+            
+            // Material para el modelo
+            const material = new THREE.MeshPhongMaterial({
+                color: 0xffd700,
+                shininess: 100,
+                side: THREE.DoubleSide
+            });
+            
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            mesh.scale.set(autoScale, autoScale, autoScale);
+            
+            // Crear grupo para el modelo
+            const modelGroup = new THREE.Group();
+            modelGroup.add(mesh);
+            
+            // Posicionar sobre la base rotatoria
+            // La altura de la base rotatoria es 1 (cilindro de altura 1)
+            // Colocar el modelo justo encima de la base
+            modelGroup.position.set(0, 1, 0);
+            
+            // Agregar a la base rotatoria
+            rotatingBase.add(modelGroup);
+            
+            // Guardar referencias
+            scanningObject = modelGroup;
+            customModel = mesh;
+            modelScale = 1.0;
+            
+            // Reset slider de escala
+            document.getElementById('model-scale-slider').value = 1.0;
+            document.getElementById('model-scale-value').textContent = '1.0x';
+            
+            console.log('Modelo cargado. Auto-escala aplicada:', autoScale);
+            console.log('Tamaño del modelo:', newSize);
+            console.log('Posición del modelo:', modelGroup.position);
+            alert('✅ Modelo 3D cargado correctamente!\n\nEl objeto está posicionado sobre la base rotatoria.\nPuedes ajustar la escala con el slider si es necesario.');
+        }
+
+        // Aplicar escala al modelo
+        function applyModelScale(scale) {
+            if (customModel) {
+                const currentScale = customModel.scale.x / modelScale; // Escala base
+                customModel.scale.set(
+                    currentScale * scale,
+                    currentScale * scale,
+                    currentScale * scale
+                );
+                modelScale = scale;
+            }
+        }
+
+        // Restaurar objeto original (taza)
+        function restoreOriginalObject() {
+            removeCurrentObject();
+            createObjectToScan();
+            
+            // Reset slider de escala
+            document.getElementById('model-scale-slider').value = 1.0;
+            document.getElementById('model-scale-value').textContent = '1.0x';
+            modelScale = 1.0;
+        }
+
+        // Función de easing para animaciones suaves
+        function easeInOutCubic(t) {
+            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        function lerp(start, end, t) {
+            return start + (end - start) * t;
+        }
+
+        // Inicializar Three.js
+        function init() {
+            // Crear escena
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf0f0f0);
+            scene.fog = new THREE.Fog(0xf0f0f0, 50, 200);
+
+            // Configurar cámara
+            camera = new THREE.PerspectiveCamera(
+                60,
+                (window.innerWidth - 350) / window.innerHeight,
+                0.1,
+                1000
+            );
+            camera.position.set(40, 40, 40);
+            camera.lookAt(0, 0, 0);
+
+            // Configurar renderer
+            const container = document.getElementById('canvas-container');
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            container.appendChild(renderer.domElement);
+
+            // Controles de órbita
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 20;
+            controls.maxDistance = 100;
+
+            // Iluminación
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(30, 50, 30);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.camera.near = 1;
+            directionalLight.shadow.camera.far = 100;
+            directionalLight.shadow.camera.left = -50;
+            directionalLight.shadow.camera.right = 50;
+            directionalLight.shadow.camera.top = 50;
+            directionalLight.shadow.camera.bottom = -50;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            scene.add(directionalLight);
+
+            const pointLight = new THREE.PointLight(0xffffff, 0.5);
+            pointLight.position.set(-20, 30, -20);
+            scene.add(pointLight);
+
+            // Crear grid
+            const gridHelper = new THREE.GridHelper(80, 40, 0x888888, 0xcccccc);
+            scene.add(gridHelper);
+
+            // Crear elementos de la escena
+            createRotatingBase();
+            createGuidingRail();
+            createArticulatedArm();
+            createObjectToScan();
+
+            // Inicializar vista de cámara virtual
+            initCameraView();
+
+            // Iniciar animación
+            animate();
+
+            // Event listeners
+            setupEventListeners();
+            
+            // Actualizar posición inicial y sincronizar posiciones actuales
+            updateArmPosition();
+            
+            // Inicializar las posiciones actuales para coincidir con las objetivo
+            // Esto previene que los eslabones "salten" o desaparezcan al inicio
+            setTimeout(() => {
+                currentArmPosition.link1.x = targetArmPosition.link1.x;
+                currentArmPosition.link1.y = targetArmPosition.link1.y;
+                currentArmPosition.link1.z = targetArmPosition.link1.z;
+                currentArmPosition.link1.rotation = targetArmPosition.link1.rotation;
+                
+                currentArmPosition.link2.x = targetArmPosition.link2.x;
+                currentArmPosition.link2.y = targetArmPosition.link2.y;
+                currentArmPosition.link2.z = targetArmPosition.link2.z;
+                currentArmPosition.link2.rotation = targetArmPosition.link2.rotation;
+                
+                currentArmPosition.elbow.x = targetArmPosition.elbow.x;
+                currentArmPosition.elbow.y = targetArmPosition.elbow.y;
+                currentArmPosition.elbow.z = targetArmPosition.elbow.z;
+                
+                currentArmPosition.camera.x = targetArmPosition.camera.x;
+                currentArmPosition.camera.y = targetArmPosition.camera.y;
+                currentArmPosition.camera.z = targetArmPosition.camera.z;
+                currentArmPosition.camera.rotation = targetArmPosition.camera.rotation;
+                
+                // Iniciar demo automática después de 1.5 segundos
+                if (isFirstLoad) {
+                    setTimeout(() => {
+                        startInitialDemo();
+                    }, 1500);
+                }
+            }, 100);
+        }
+
+        // Función para la demostración automática inicial
+        function startInitialDemo() {
+            console.log('Iniciando demostración automática...');
+            
+            // Cambiar a modo automático
+            setMode('auto');
+            
+            // Crear overlay de bienvenida
+            const overlay = document.createElement('div');
+            overlay.id = 'demo-overlay';
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.75);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                animation: fadeIn 0.5s;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes slideDown {
+                    from { transform: translateX(-50%) translateY(-100%); }
+                    to { transform: translateX(-50%) translateY(0); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            overlay.innerHTML = `
+                <div style="
+                    background: white;
+                    padding: 40px;
+                    border-radius: 20px;
+                    max-width: 600px;
+                    text-align: center;
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                ">
+                    <h2 style="color: #667eea; margin-bottom: 20px; font-size: 28px;">
+                        🤖 Bienvenido al Simulador de Escaneo 3D
+                    </h2>
+                    <p style="color: #555; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
+                        Este simulador muestra cómo funciona un sistema de escaneo 3D con brazo robótico articulado y base rotatoria.
+                        <br><br>
+                        <strong>¿Deseas ver una demostración rápida del proceso completo de escaneo?</strong>
+                    </p>
+                    <button id="start-demo-btn" style="
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        border: none;
+                        padding: 15px 40px;
+                        font-size: 18px;
+                        border-radius: 10px;
+                        cursor: pointer;
+                        font-weight: bold;
+                        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                        transition: transform 0.2s;
+                    " onmouseover="this.style.transform='translateY(-2px)'" 
+                       onmouseout="this.style.transform='translateY(0)'">
+                        ▶️ Ver Demostración
+                    </button>
+                    <br>
+                    <button id="skip-demo-btn" style="
+                        background: transparent;
+                        color: #667eea;
+                        border: 2px solid #667eea;
+                        padding: 12px 30px;
+                        font-size: 14px;
+                        border-radius: 10px;
+                        cursor: pointer;
+                        margin-top: 15px;
+                        transition: all 0.2s;
+                    " onmouseover="this.style.background='#667eea'; this.style.color='white'" 
+                       onmouseout="this.style.background='transparent'; this.style.color='#667eea'">
+                        Saltar Demo
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            // Event listeners para los botones
+            document.getElementById('start-demo-btn').addEventListener('click', () => {
+                document.body.removeChild(overlay);
+                runQuickDemo();
+            });
+            
+            document.getElementById('skip-demo-btn').addEventListener('click', () => {
+                document.body.removeChild(overlay);
+                isFirstLoad = false;
+                setMode('manual');
+                
+                // IMPORTANTE: Asegurarse de que los eslabones existan y estén añadidos a la escena
+                // Si no existen, crearlos
+                if (!link1 || !link1.parent) {
+                    console.log('Creando eslabones tras saltar demo...');
+                    // Eliminar cualquier eslabón residual
+                    removeAllLinks();
+                    
+                    // Crear nuevos eslabones
+                    const link1Geometry = new THREE.CylinderGeometry(0.8, 0.8, CONFIG.link1Length, 16);
+                    const link1Material = new THREE.MeshPhongMaterial({ 
+                        color: 0x2ecc71,
+                        shininess: 100,
+                        emissive: 0x1a7a42,
+                        emissiveIntensity: 0.1
+                    });
+                    link1 = new THREE.Mesh(link1Geometry, link1Material);
+                    link1.name = "LINK_1";
+                    link1.castShadow = true;
+                    scene.add(link1);
+                }
+                
+                if (!link2 || !link2.parent) {
+                    const link2Geometry = new THREE.CylinderGeometry(0.7, 0.7, CONFIG.link2Length, 16);
+                    const link2Material = new THREE.MeshPhongMaterial({ 
+                        color: 0x3498db,
+                        shininess: 100,
+                        emissive: 0x1f5f8b,
+                        emissiveIntensity: 0.1
+                    });
+                    link2 = new THREE.Mesh(link2Geometry, link2Material);
+                    link2.name = "LINK_2";
+                    link2.castShadow = true;
+                    scene.add(link2);
+                }
+                
+                // Actualizar posición y sincronizar
+                updateArmPosition();
+                setTimeout(() => {
+                    currentArmPosition.link1.x = targetArmPosition.link1.x;
+                    currentArmPosition.link1.y = targetArmPosition.link1.y;
+                    currentArmPosition.link1.z = targetArmPosition.link1.z;
+                    currentArmPosition.link1.rotation = targetArmPosition.link1.rotation;
+                    
+                    currentArmPosition.link2.x = targetArmPosition.link2.x;
+                    currentArmPosition.link2.y = targetArmPosition.link2.y;
+                    currentArmPosition.link2.z = targetArmPosition.link2.z;
+                    currentArmPosition.link2.rotation = targetArmPosition.link2.rotation;
+                    
+                    currentArmPosition.elbow.x = targetArmPosition.elbow.x;
+                    currentArmPosition.elbow.y = targetArmPosition.elbow.y;
+                    currentArmPosition.elbow.z = targetArmPosition.elbow.z;
+                    
+                    currentArmPosition.camera.x = targetArmPosition.camera.x;
+                    currentArmPosition.camera.y = targetArmPosition.camera.y;
+                    currentArmPosition.camera.z = targetArmPosition.camera.z;
+                    currentArmPosition.camera.rotation = targetArmPosition.camera.rotation;
+                }, 100);
+            });
+        }
+
+        // Función para ejecutar la demo rápida
+        function runQuickDemo() {
+            console.log('Ejecutando demo rápida...');
+            isFirstLoad = false;
+            
+            // Configurar velocidad muy rápida para la demo
+            CONFIG.simulationSpeed = 3;
+            document.getElementById('simulation-speed').value = '3';
+            
+            // Iniciar desde nivel 1
+            CONFIG.currentLevel = 1;
+            CONFIG.currentBaseRotation = 0;
+            updateArmPosition();
+            
+            // Sincronizar posiciones
+            setTimeout(() => {
+                currentArmPosition.link1.x = targetArmPosition.link1.x;
+                currentArmPosition.link1.y = targetArmPosition.link1.y;
+                currentArmPosition.link1.z = targetArmPosition.link1.z;
+                currentArmPosition.link1.rotation = targetArmPosition.link1.rotation;
+                
+                currentArmPosition.link2.x = targetArmPosition.link2.x;
+                currentArmPosition.link2.y = targetArmPosition.link2.y;
+                currentArmPosition.link2.z = targetArmPosition.link2.z;
+                currentArmPosition.link2.rotation = targetArmPosition.link2.rotation;
+                
+                currentArmPosition.elbow.x = targetArmPosition.elbow.x;
+                currentArmPosition.elbow.y = targetArmPosition.elbow.y;
+                currentArmPosition.elbow.z = targetArmPosition.elbow.z;
+                
+                currentArmPosition.camera.x = targetArmPosition.camera.x;
+                currentArmPosition.camera.y = targetArmPosition.camera.y;
+                currentArmPosition.camera.z = targetArmPosition.camera.z;
+                currentArmPosition.camera.rotation = targetArmPosition.camera.rotation;
+                
+                // Resetear rotaciones
+                currentBaseRotation = 0;
+                targetBaseRotation = 0;
+                
+                // Mostrar mensaje de demo
+                const demoMsg = document.createElement('div');
+                demoMsg.id = 'demo-message';
+                demoMsg.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    padding: 15px 30px;
+                    border-radius: 50px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    z-index: 9999;
+                    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+                    animation: slideDown 0.5s;
+                `;
+                demoMsg.innerHTML = '🎬 Demostración en progreso...';
+                document.body.appendChild(demoMsg);
+                
+                // Iniciar el escaneo
+                startAutomaticScan();
+                
+                // Remover mensaje cuando termine
+                demoTimeout = setTimeout(() => {
+                    if (document.getElementById('demo-message')) {
+                        document.body.removeChild(document.getElementById('demo-message'));
+                    }
+                    
+                    // Mostrar mensaje de finalización
+                    const completeMsg = document.createElement('div');
+                    completeMsg.style.cssText = demoMsg.style.cssText.replace('slideDown', 'fadeIn');
+                    completeMsg.innerHTML = '✅ ¡Demostración completada! Ahora puedes usar el simulador';
+                    document.body.appendChild(completeMsg);
+                    
+                    setTimeout(() => {
+                        if (completeMsg.parentNode) {
+                            document.body.removeChild(completeMsg);
+                        }
+                        // Volver a modo manual y velocidad normal
+                        setMode('manual');
+                        CONFIG.simulationSpeed = 1;
+                        document.getElementById('simulation-speed').value = '1';
+                    }, 3000);
+                }, 20000); // Demo dura ~20 segundos
+            }, 300);
+        }
+
+        function createRotatingBase() {
+            // Grupo para la plataforma rotatoria (ESTA SÍ ROTA)
+            rotatingBase = new THREE.Group();
+            rotatingBase.position.set(0, 0, 0); // Centro de la escena
+            scene.add(rotatingBase);
+
+            // Base de la plataforma rotatoria
+            const platformBaseGeometry = new THREE.CylinderGeometry(CONFIG.baseRadius, CONFIG.baseRadius, 1, 64);
+            const platformBaseMaterial = new THREE.MeshPhongMaterial({
+                color: 0x7f8c8d,
+                metalness: 0.7,
+                roughness: 0.3,
+                shininess: 100
+            });
+            const platformBase = new THREE.Mesh(platformBaseGeometry, platformBaseMaterial);
+            platformBase.position.y = 0.5;
+            platformBase.castShadow = true;
+            platformBase.receiveShadow = true;
+            rotatingBase.add(platformBase);
+
+            // Superficie de la plataforma (donde va el objeto)
+            const platformSurfaceGeometry = new THREE.CylinderGeometry(CONFIG.baseRadius - 0.5, CONFIG.baseRadius - 0.5, 0.3, 64);
+            const platformSurfaceMaterial = new THREE.MeshPhongMaterial({
+                color: 0x3498db,
+                metalness: 0.6,
+                roughness: 0.4,
+                shininess: 100,
+                emissive: 0x2980b9,
+                emissiveIntensity: 0.2
+            });
+            const platformSurface = new THREE.Mesh(platformSurfaceGeometry, platformSurfaceMaterial);
+            platformSurface.position.y = 1.15;
+            platformSurface.castShadow = true;
+            platformSurface.receiveShadow = true;
+            rotatingBase.add(platformSurface);
+
+            // Marcador de dirección en la plataforma (flecha roja)
+            const arrowGeometry = new THREE.ConeGeometry(0.8, 2, 8);
+            const arrowMaterial = new THREE.MeshPhongMaterial({
+                color: 0xff0000,
+                metalness: 0.5,
+                roughness: 0.5,
+                emissive: 0xff0000,
+                emissiveIntensity: 0.3,
+                shininess: 80
+            });
+            const arrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
+            arrow.rotation.x = Math.PI / 2;
+            arrow.position.set(CONFIG.baseRadius - 2, 1.5, 0);
+            rotatingBase.add(arrow);
+
+            // Borde de la base con efecto metálico
+            const edgeGeometry = new THREE.TorusGeometry(CONFIG.baseRadius, 0.3, 16, 64);
+            const edgeMaterial = new THREE.MeshPhongMaterial({
+                color: 0x2c3e50,
+                shininess: 150,
+                emissive: 0x34495e,
+                emissiveIntensity: 0.1
+            });
+            const edge = new THREE.Mesh(edgeGeometry, edgeMaterial);
+            edge.rotation.x = Math.PI / 2;
+            edge.position.y = 1;
+            rotatingBase.add(edge);
+
+            // Área de escaneo (marcador visual)
+            const scanAreaGeometry = new THREE.RingGeometry(
+                CONFIG.scanAreaRadius * 0.9,
+                CONFIG.scanAreaRadius,
+                64,
+                1,
+                0,
+                Math.PI / 2
+            );
+            const scanAreaMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffeb3b,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.4
+            });
+            const scanArea = new THREE.Mesh(scanAreaGeometry, scanAreaMaterial);
+            scanArea.rotation.x = -Math.PI / 2;
+            scanArea.position.y = 1.3;
+            rotatingBase.add(scanArea);
+
+            // Líneas divisorias en la base con mejor visualización
+            for (let i = 0; i < 360; i += CONFIG.captureIncrement) {
+                const angle = (i * Math.PI) / 180;
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+                    new THREE.Vector3(0, 1.25, 0),
+                    new THREE.Vector3(
+                        Math.cos(angle) * CONFIG.baseRadius,
+                        1.25,
+                        Math.sin(angle) * CONFIG.baseRadius
+                    )
+                ]);
+                const lineMaterial = new THREE.LineBasicMaterial({ 
+                    color: 0xecf0f1, 
+                    opacity: 0.6, 
+                    transparent: true 
+                });
+                const line = new THREE.Line(lineGeometry, lineMaterial);
+                rotatingBase.add(line);
+
+                // Marcadores en el borde
+                const markerGeometry = new THREE.CylinderGeometry(0.3, 0.3, 0.5, 8);
+                const markerMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xe74c3c,
+                    emissive: 0xc0392b,
+                    emissiveIntensity: 0.3
+                });
+                const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+                marker.position.set(
+                    Math.cos(angle) * CONFIG.baseRadius * 0.95,
+                    1.5,
+                    Math.sin(angle) * CONFIG.baseRadius * 0.95
+                );
+                rotatingBase.add(marker);
+            }
+        }
+
+        function createGuidingRail() {
+            // Rail guiador (arco de 1/4 de círculo VERTICAL)
+            const railGroup = new THREE.Group();
+            
+            // Elevar el rail 4cm para que quede por encima de la base rotatoria
+            const railHeightOffset = 4;
+            
+            // Crear el arco del rail en el plano vertical
+            const curve = new THREE.EllipseCurve(
+                0, 0,
+                CONFIG.railRadius, CONFIG.railRadius,
+                0, Math.PI / 2,
+                false,
+                0
+            );
+
+            const points = curve.getPoints(50);
+            // Mapear los puntos al plano vertical (XY en lugar de XZ) y elevar
+            const railGeometry = new THREE.BufferGeometry().setFromPoints(
+                points.map(p => new THREE.Vector3(p.x, p.y + railHeightOffset, 0)) // Centrado en Z=0
+            );
+
+            // Tubo para el rail
+            const tubeGeometry = new THREE.TubeGeometry(
+                new THREE.CatmullRomCurve3(
+                    points.map(p => new THREE.Vector3(p.x, p.y + railHeightOffset, 0)) // Centrado en Z=0
+                ),
+                50,
+                0.5,
+                8,
+                false
+            );
+            const tubeMaterial = new THREE.MeshPhongMaterial({ color: 0x95a5a6, shininess: 50 });
+            const railTube = new THREE.Mesh(tubeGeometry, tubeMaterial);
+            railGroup.add(railTube);
+
+            // Marcar los 5 niveles en el rail
+            CONFIG.railLevels.forEach((angle, index) => {
+                const rad = (angle * Math.PI) / 180;
+                const x = CONFIG.railRadius * Math.cos(rad);
+                const y = CONFIG.railRadius * Math.sin(rad) + railHeightOffset;
+                
+                const markerGeometry = new THREE.SphereGeometry(0.8, 16, 16);
+                const markerMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xe74c3c,
+                    emissive: 0xe74c3c,
+                    emissiveIntensity: 0.3
+                });
+                const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+                marker.position.set(x, y, 0); // Centrado en Z=0
+                railGroup.add(marker);
+
+                // Etiqueta de nivel
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = 128;
+                canvas.height = 64;
+                context.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                context.fillStyle = 'black';
+                context.font = 'bold 30px Arial';
+                context.textAlign = 'center';
+                context.fillText(`N${index + 1}`, 64, 40);
+                
+                const texture = new THREE.CanvasTexture(canvas);
+                const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+                const sprite = new THREE.Sprite(spriteMaterial);
+                sprite.position.set(x * 1.2, y * 1.2, 0); // Centrado en Z=0
+                sprite.scale.set(4, 2, 1);
+                railGroup.add(sprite);
+            });
+
+            guidingRail = railGroup;
+            scene.add(guidingRail);
+        }
+
+        function createArticulatedArm() {
+            // Grupo del brazo completo
+            const armGroup = new THREE.Group();
+
+            // Base del brazo (articulación fija) - VERTICAL y 5cm atrás del rail
+            const baseGeometry = new THREE.CylinderGeometry(1.5, 2, 2, 16);
+            const baseMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x34495e,
+                shininess: 80
+            });
+            armBase = new THREE.Mesh(baseGeometry, baseMaterial);
+            armBase.name = "ARM_BASE"; // Nombre único
+            // Posicionar 5cm hacia atrás del rail y al nivel del rail (con offset de altura), centrado en Z=0
+            armBase.position.set(CONFIG.railRadius + CONFIG.armBaseOffset, CONFIG.railHeightOffset, 0);
+            armBase.castShadow = true;
+            scene.add(armBase);
+
+            // Eslabón 1 (Base-Codo) - VERTICAL
+            const link1Geometry = new THREE.CylinderGeometry(0.8, 0.8, CONFIG.link1Length, 16);
+            const link1Material = new THREE.MeshPhongMaterial({ 
+                color: 0x2ecc71,
+                shininess: 100,
+                emissive: 0x1a7a42,
+                emissiveIntensity: 0.1
+            });
+            link1 = new THREE.Mesh(link1Geometry, link1Material);
+            link1.name = "LINK_1"; // Nombre único
+            link1.castShadow = true;
+            
+            // ARTICULACIÓN DEL CODO (ESFERA VISIBLE)
+            const elbowGeometry = new THREE.SphereGeometry(1.2, 32, 32);
+            const elbowMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xe67e22,
+                shininess: 100,
+                emissive: 0xe67e22,
+                emissiveIntensity: 0.2
+            });
+            elbowJoint = new THREE.Mesh(elbowGeometry, elbowMaterial);
+            elbowJoint.name = "ELBOW_JOINT"; // Nombre único
+            elbowJoint.castShadow = true;
+            elbowJoint.receiveShadow = true;
+            scene.add(elbowJoint);
+            
+            // Eslabón 2 (Codo-Cámara) - VERTICAL
+            const link2Geometry = new THREE.CylinderGeometry(0.7, 0.7, CONFIG.link2Length, 16);
+            const link2Material = new THREE.MeshPhongMaterial({ 
+                color: 0x3498db,
+                shininess: 100,
+                emissive: 0x1f5f8b,
+                emissiveIntensity: 0.1
+            });
+            link2 = new THREE.Mesh(link2Geometry, link2Material);
+            link2.name = "LINK_2"; // Nombre único
+            link2.castShadow = true;
+
+            // Cabezal de la cámara
+            const cameraGeometry = new THREE.BoxGeometry(2.5, 2.5, 3);
+            const cameraMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x1abc9c,
+                shininess: 120,
+                emissive: 0x16a085,
+                emissiveIntensity: 0.2
+            });
+            cameraHead = new THREE.Mesh(cameraGeometry, cameraMaterial);
+            cameraHead.name = "CAMERA_HEAD"; // Nombre único
+            cameraHead.castShadow = true;
+
+            // Lente de la cámara (apuntando hacia el área de escaneo)
+            const lensGeometry = new THREE.CylinderGeometry(0.8, 0.8, 0.5, 16);
+            const lensMaterial = new THREE.MeshPhongMaterial({
+                color: 0x2c3e50,
+                emissive: 0x00ffff,
+                emissiveIntensity: 0.3,
+                shininess: 150
+            });
+            cameraLens = new THREE.Mesh(lensGeometry, lensMaterial);
+            cameraLens.name = "CAMERA_LENS"; // Nombre único para identificarlo
+            cameraLens.rotation.z = Math.PI / 2; // Horizontal
+            cameraLens.position.x = 1.8; // Posición corregida para apuntar hacia el área de escaneo
+            cameraHead.add(cameraLens);
+
+            // Luz en la cámara (indicador LED)
+            const ledLight = new THREE.PointLight(0x00ffff, 0.5, 10);
+            ledLight.position.x = 2; // Ajustar también la posición de la luz
+            cameraHead.add(ledLight);
+
+            // Estructura del brazo
+            armGroup.add(link1);
+            armGroup.add(link2);
+            armGroup.add(cameraHead);
+
+            scene.add(armGroup);
+        }
+
+        function createObjectToScan() {
+            // Objeto de ejemplo para escanear (taza)
+            const cupGroup = new THREE.Group();
+            
+            // Cuerpo de la taza
+            const bodyGeometry = new THREE.CylinderGeometry(2, 2.5, 4, 32);
+            const bodyMaterial = new THREE.MeshPhongMaterial({
+                color: 0xff6b6b,
+                shininess: 100
+            });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = 3;
+            body.castShadow = true;
+            cupGroup.add(body);
+
+            // Asa de la taza
+            const handleCurve = new THREE.QuadraticBezierCurve3(
+                new THREE.Vector3(2.5, 4, 0),
+                new THREE.Vector3(4, 4, 0),
+                new THREE.Vector3(2.5, 2, 0)
+            );
+            const handleGeometry = new THREE.TubeGeometry(handleCurve, 20, 0.3, 8, false);
+            const handle = new THREE.Mesh(handleGeometry, bodyMaterial);
+            handle.castShadow = true;
+            cupGroup.add(handle);
+
+            // Posicionar en el centro de la base y agregar a la base rotatoria
+            cupGroup.position.set(0, 1, 0);
+            rotatingBase.add(cupGroup);
+            
+            // Guardar referencia
+            scanningObject = cupGroup;
+            customModel = null; // No hay modelo personalizado
+        }
+
+        // Inicializar vista de cámara virtual
+        function initCameraView() {
+            // Crear cámara virtual que simulará la perspectiva del cabezal
+            virtualCamera = new THREE.PerspectiveCamera(
+                75, // Campo de visión base
+                320 / 240, // Aspect ratio del canvas de vista
+                0.1,
+                100
+            );
+            
+            // Crear renderer para la vista de cámara
+            const cameraViewCanvas = document.getElementById('camera-view-canvas');
+            cameraViewRenderer = new THREE.WebGLRenderer({ 
+                canvas: cameraViewCanvas,
+                antialias: true 
+            });
+            cameraViewRenderer.setSize(320, 240);
+            cameraViewRenderer.shadowMap.enabled = true;
+            cameraViewRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        }
+
+        // Función para actualizar el zoom de la cámara virtual
+        function updateCameraZoom(zoomLevel) {
+            if (!virtualCamera) return;
+            
+            cameraZoom = zoomLevel;
+            // Reducir el FOV para hacer zoom (FOV más pequeño = más zoom)
+            // FOV base es 75°, al hacer zoom 2x queremos FOV de 37.5°
+            virtualCamera.fov = 75 / zoomLevel;
+            virtualCamera.updateProjectionMatrix();
+            
+            // Actualizar display
+            document.getElementById('camera-zoom-value').textContent = `${zoomLevel.toFixed(1)}x`;
+        }
+
+        // Actualizar posición y orientación de la cámara virtual
+        function updateVirtualCamera() {
+            if (!cameraHead || !virtualCamera || !cameraLens) return;
+            
+            // Obtener la posición mundial del lente (donde está la cámara)
+            const lensWorldPosition = new THREE.Vector3();
+            cameraLens.getWorldPosition(lensWorldPosition);
+            
+            // Posicionar la cámara virtual en el lente
+            virtualCamera.position.copy(lensWorldPosition);
+            
+            // Obtener la rotación mundial del cabezal para orientar correctamente la cámara
+            const cameraWorldQuaternion = new THREE.Quaternion();
+            cameraHead.getWorldQuaternion(cameraWorldQuaternion);
+            virtualCamera.setRotationFromQuaternion(cameraWorldQuaternion);
+            
+            // Ajustar la orientación para que apunte hacia adelante y esté correctamente orientada
+            virtualCamera.rotateY(-Math.PI / 2); // Apuntar en dirección X positiva
+            virtualCamera.rotateZ(Math.PI); // Corregir la inversión (de cabeza)
+            
+            // Renderizar la vista de la cámara si está activa
+            if (cameraViewActive && cameraViewRenderer) {
+                // Ocultar el lente temporalmente para que no bloquee la vista
+                const originalVisible = cameraLens.visible;
+                cameraLens.visible = false;
+                
+                // Renderizar
+                cameraViewRenderer.render(scene, virtualCamera);
+                
+                // Restaurar visibilidad del lente
+                cameraLens.visible = originalVisible;
+            }
+        }
+
+        // Toggle de la vista de cámara
+        function toggleCameraView() {
+            cameraViewActive = !cameraViewActive;
+            const panel = document.getElementById('camera-view-panel');
+            const btn = document.getElementById('toggle-camera-view-btn');
+            
+            if (cameraViewActive) {
+                panel.classList.add('active');
+                btn.classList.add('active');
+                btn.textContent = '📹 Vista Activa';
+            } else {
+                panel.classList.remove('active');
+                btn.classList.remove('active');
+                btn.textContent = '📹 Vista de Cámara';
+            }
+        }
+
+        function updateArmPosition() {
+            const currentLevel = CONFIG.currentLevel;
+            const levelAngle = CONFIG.railLevels[currentLevel - 1];
+            const levelRad = (levelAngle * Math.PI) / 180;
+
+            // Posición objetivo en el rail (plano vertical XY) con offset de altura, centrado en Z
+            const targetX = CONFIG.railRadius * Math.cos(levelRad);
+            const targetY = CONFIG.railRadius * Math.sin(levelRad) + CONFIG.railHeightOffset;
+            const targetZ = 0; // Centrado en Z=0
+
+            // Posición de la base del brazo (5cm atrás del rail, al nivel del suelo + offset)
+            const baseX = CONFIG.railRadius + CONFIG.armBaseOffset;
+            const baseY = CONFIG.railHeightOffset; // Mismo nivel de altura que la base del rail
+            const baseZ = 0; // Centrado en Z=0
+
+            // Calcular distancia al objetivo en el plano vertical
+            const dx = targetX - baseX;
+            const dy = targetY - baseY;
+            const distanceToTarget = Math.sqrt(dx * dx + dy * dy);
+
+            const link1Len = CONFIG.link1Length;
+            const link2Len = CONFIG.link2Length;
+
+            // Verificar si es alcanzable
+            if (distanceToTarget > link1Len + link2Len) {
+                console.warn("Objetivo fuera de alcance");
+                return;
+            }
+
+            // Verificar si la distancia es demasiado pequeña (evitar división por cero)
+            if (distanceToTarget < 0.1) {
+                console.warn("Objetivo demasiado cerca de la base");
+                return;
+            }
+
+            // Calcular ángulos usando cinemática inversa (en plano vertical)
+            const angleToTarget = Math.atan2(dy, dx);
+
+            // Ley de cosenos para calcular ángulo del codo
+            // Agregar límite para evitar valores inválidos cuando los eslabones son iguales
+            let cosElbow = (link1Len * link1Len + link2Len * link2Len - distanceToTarget * distanceToTarget) / 
+                            (2 * link1Len * link2Len);
+            
+            // Clampear el valor para evitar NaN
+            cosElbow = Math.max(-0.999, Math.min(0.999, cosElbow));
+            const elbowAngle = Math.acos(cosElbow);
+
+            // Calcular ángulo del hombro
+            let cosTheta = (link1Len * link1Len + distanceToTarget * distanceToTarget - link2Len * link2Len) / 
+                            (2 * link1Len * distanceToTarget);
+            
+            // Clampear el valor para evitar NaN
+            cosTheta = Math.max(-0.999, Math.min(0.999, cosTheta));
+            const theta = Math.acos(cosTheta);
+            const shoulderAngle = angleToTarget - theta;
+
+            // Verificar que los ángulos sean válidos
+            if (isNaN(shoulderAngle) || isNaN(elbowAngle)) {
+                console.warn("Ángulos inválidos calculados");
+                return;
+            }
+
+            // Calcular posiciones objetivo (no aplicar directamente)
+            const link1MidX = baseX + Math.cos(shoulderAngle) * (link1Len / 2);
+            const link1MidY = baseY + Math.sin(shoulderAngle) * (link1Len / 2);
+            
+            targetArmPosition.link1.x = link1MidX;
+            targetArmPosition.link1.y = link1MidY;
+            targetArmPosition.link1.z = baseZ;
+            targetArmPosition.link1.rotation = shoulderAngle - Math.PI / 2;
+
+            // Posición del codo
+            const elbowX = baseX + Math.cos(shoulderAngle) * link1Len;
+            const elbowY = baseY + Math.sin(shoulderAngle) * link1Len;
+            
+            targetArmPosition.elbow.x = elbowX;
+            targetArmPosition.elbow.y = elbowY;
+            targetArmPosition.elbow.z = baseZ;
+
+            // Eslabón 2
+            const link2Angle = shoulderAngle + (Math.PI - elbowAngle);
+            const link2MidX = elbowX + Math.cos(link2Angle) * (link2Len / 2);
+            const link2MidY = elbowY + Math.sin(link2Angle) * (link2Len / 2);
+            
+            targetArmPosition.link2.x = link2MidX;
+            targetArmPosition.link2.y = link2MidY;
+            targetArmPosition.link2.z = baseZ;
+            targetArmPosition.link2.rotation = link2Angle - Math.PI / 2;
+
+            // Cámara
+            targetArmPosition.camera.x = targetX;
+            targetArmPosition.camera.y = targetY;
+            targetArmPosition.camera.z = targetZ;
+            
+            const angleToCenterXY = Math.atan2(-targetY, -targetX);
+            targetArmPosition.camera.rotation = angleToCenterXY;
+
+            // Actualizar display del ángulo del codo
+            const elbowAngleDeg = ((Math.PI - elbowAngle) * 180 / Math.PI);
+            document.getElementById('elbow-angle-display').textContent = 
+                `${elbowAngleDeg.toFixed(1)}°`;
+        }
+
+        // Nueva función para aplicar animaciones suaves
+        function applyArmAnimations() {
+            const speed = CONFIG.animationSpeed;
+
+            if (link1) {
+                currentArmPosition.link1.x = lerp(currentArmPosition.link1.x, targetArmPosition.link1.x, speed);
+                currentArmPosition.link1.y = lerp(currentArmPosition.link1.y, targetArmPosition.link1.y, speed);
+                currentArmPosition.link1.z = lerp(currentArmPosition.link1.z, targetArmPosition.link1.z, speed);
+                currentArmPosition.link1.rotation = lerp(currentArmPosition.link1.rotation, targetArmPosition.link1.rotation, speed);
+
+                link1.position.set(
+                    currentArmPosition.link1.x,
+                    currentArmPosition.link1.y,
+                    currentArmPosition.link1.z
+                );
+                link1.rotation.z = currentArmPosition.link1.rotation;
+                link1.rotation.x = 0;
+                link1.rotation.y = 0;
+            }
+
+            if (elbowJoint) {
+                currentArmPosition.elbow.x = lerp(currentArmPosition.elbow.x, targetArmPosition.elbow.x, speed);
+                currentArmPosition.elbow.y = lerp(currentArmPosition.elbow.y, targetArmPosition.elbow.y, speed);
+                currentArmPosition.elbow.z = lerp(currentArmPosition.elbow.z, targetArmPosition.elbow.z, speed);
+
+                elbowJoint.position.set(
+                    currentArmPosition.elbow.x,
+                    currentArmPosition.elbow.y,
+                    currentArmPosition.elbow.z
+                );
+            }
+
+            if (link2) {
+                currentArmPosition.link2.x = lerp(currentArmPosition.link2.x, targetArmPosition.link2.x, speed);
+                currentArmPosition.link2.y = lerp(currentArmPosition.link2.y, targetArmPosition.link2.y, speed);
+                currentArmPosition.link2.z = lerp(currentArmPosition.link2.z, targetArmPosition.link2.z, speed);
+                currentArmPosition.link2.rotation = lerp(currentArmPosition.link2.rotation, targetArmPosition.link2.rotation, speed);
+
+                link2.position.set(
+                    currentArmPosition.link2.x,
+                    currentArmPosition.link2.y,
+                    currentArmPosition.link2.z
+                );
+                link2.rotation.z = currentArmPosition.link2.rotation;
+                link2.rotation.x = 0;
+                link2.rotation.y = 0;
+            }
+
+            if (cameraHead) {
+                currentArmPosition.camera.x = lerp(currentArmPosition.camera.x, targetArmPosition.camera.x, speed);
+                currentArmPosition.camera.y = lerp(currentArmPosition.camera.y, targetArmPosition.camera.y, speed);
+                currentArmPosition.camera.z = lerp(currentArmPosition.camera.z, targetArmPosition.camera.z, speed);
+                currentArmPosition.camera.rotation = lerp(currentArmPosition.camera.rotation, targetArmPosition.camera.rotation, speed);
+
+                cameraHead.position.set(
+                    currentArmPosition.camera.x,
+                    currentArmPosition.camera.y,
+                    currentArmPosition.camera.z
+                );
+                cameraHead.rotation.y = 0;
+                cameraHead.rotation.z = currentArmPosition.camera.rotation;
+                cameraHead.rotation.x = 0;
+            }
+        }
+
+        function capturePhoto() {
+            totalCaptures++;
+            
+            // Crear punto de captura visual
+            const captureGeometry = new THREE.SphereGeometry(0.5, 16, 16);
+            const captureMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffeb3b,
+                transparent: true,
+                opacity: 0.8
+            });
+            const capturePoint = new THREE.Mesh(captureGeometry, captureMaterial);
+            
+            // Posicionar en la ubicación de la cámara
+            if (cameraHead) {
+                capturePoint.position.copy(cameraHead.position);
+                capturePoint.isLine = false; // Marcar como punto, no línea
+                scene.add(capturePoint);
+                capturePoints.push(capturePoint);
+
+                // Línea desde la cámara hacia el centro
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+                    cameraHead.position.clone(),
+                    new THREE.Vector3(0, 2, 0)
+                ]);
+                const lineMaterial = new THREE.LineBasicMaterial({
+                    color: 0xffeb3b,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                const line = new THREE.Line(lineGeometry, lineMaterial);
+                line.isLine = true; // Marcar como línea
+                scene.add(line);
+                capturePoints.push(line);
+            }
+
+            // Mostrar indicador de captura con animación
+            const indicator = document.getElementById('capture-indicator');
+            indicator.style.display = 'block';
+            indicator.style.animation = 'none';
+            setTimeout(() => {
+                indicator.style.animation = 'slideInFromBottom 0.3s ease-out';
+            }, 10);
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 800);
+
+            // Actualizar contador
+            document.getElementById('total-captures').textContent = totalCaptures;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            controls.update();
+            
+            // Animación suave de rotación de la base
+            if (rotatingBase) {
+                // Interpolar la rotación actual hacia la rotación objetivo
+                targetBaseRotation = (CONFIG.currentBaseRotation * Math.PI) / 180;
+                currentBaseRotation = lerp(currentBaseRotation, targetBaseRotation, CONFIG.animationSpeed);
+                rotatingBase.rotation.y = currentBaseRotation;
+                
+                // Si no está simulando, rotar suavemente la base
+                if (!isScanning && !isAutoMode) {
+                    // Pequeña rotación constante para mostrar que está activa
+                    const time = Date.now() * 0.0001;
+                    rotatingBase.children.forEach(child => {
+                        if (child.position.y > 1) { // Solo el objeto
+                            child.rotation.y = time;
+                        }
+                    });
+                }
+            }
+
+            // Aplicar animaciones suaves del brazo
+            applyArmAnimations();
+
+            // Efecto de pulso en el codo
+            if (elbowJoint) {
+                const time = Date.now() * 0.001;
+                const pulse = 1 + Math.sin(time * 2) * 0.05;
+                elbowJoint.scale.set(pulse, pulse, pulse);
+                
+                // Cambiar intensidad emissive
+                if (elbowJoint.material) {
+                    elbowJoint.material.emissiveIntensity = 0.2 + Math.sin(time * 3) * 0.1;
+                }
+            }
+
+            // Efecto de brillo en la cámara
+            if (cameraHead && cameraHead.children[0]) {
+                const time = Date.now() * 0.001;
+                cameraHead.children[0].material.emissiveIntensity = 0.3 + Math.sin(time * 4) * 0.2;
+            }
+
+            // Animar puntos de captura
+            const time = Date.now() * 0.001;
+            capturePoints.forEach((point, index) => {
+                if (point.isLine) return; // Skip lines
+                const offset = index * 0.5;
+                point.position.y += Math.sin(time * 2 + offset) * 0.01;
+                
+                // Efecto de rotación
+                point.rotation.y += 0.02;
+                
+                // Pulso de escala
+                const scale = 1 + Math.sin(time * 3 + offset) * 0.1;
+                point.scale.set(scale, scale, scale);
+            });
+
+            // Actualizar info display
+            updateInfoDisplay();
+
+            // Actualizar vista de cámara virtual
+            updateVirtualCamera();
+
+            renderer.render(scene, camera);
+        }
+
+        function updateInfoDisplay() {
+            const info = document.getElementById('info-display');
+            const level = CONFIG.currentLevel;
+            const levelAngle = CONFIG.railLevels[level - 1];
+            
+            info.innerHTML = `
+                <strong>SISTEMA DE ESCANEO 3D</strong><br>
+                ────────────────────────────<br>
+                Nivel: ${level}/5 (${levelAngle}°)<br>
+                Rotación Base: ${CONFIG.currentBaseRotation.toFixed(1)}°<br>
+                Eslabón 1: ${CONFIG.link1Length} cm<br>
+                Eslabón 2: ${CONFIG.link2Length} cm<br>
+                Capturas: ${totalCaptures}<br>
+                Modo: ${isAutoMode ? 'AUTOMÁTICO' : 'MANUAL'}
+            `;
+        }
+
+        function setupEventListeners() {
+            // Modo manual/automático
+            document.getElementById('manual-mode-btn').addEventListener('click', () => {
+                setMode('manual');
+            });
+
+            document.getElementById('auto-mode-btn').addEventListener('click', () => {
+                setMode('auto');
+            });
+
+            // Control de rotación base
+            document.getElementById('base-rotation').addEventListener('input', (e) => {
+                CONFIG.currentBaseRotation = parseFloat(e.target.value);
+                document.getElementById('base-rotation-value').textContent = `${CONFIG.currentBaseRotation}°`;
+                document.getElementById('current-base-angle').textContent = `${CONFIG.currentBaseRotation}°`;
+            });
+
+            // Control de nivel del rail
+            document.getElementById('rail-level').addEventListener('input', (e) => {
+                CONFIG.currentLevel = parseInt(e.target.value);
+                const angle = CONFIG.railLevels[CONFIG.currentLevel - 1];
+                document.getElementById('rail-level-value').textContent = `Nivel ${CONFIG.currentLevel} (${angle}°)`;
+                document.getElementById('current-level').textContent = CONFIG.currentLevel;
+                updateArmPosition();
+            });
+
+            // Longitudes de eslabones
+            document.getElementById('link1-length').addEventListener('input', (e) => {
+                const value = parseFloat(e.target.value);
+                document.getElementById('link1-value').textContent = `${value} cm`;
+            });
+
+            document.getElementById('link2-length').addEventListener('input', (e) => {
+                const value = parseFloat(e.target.value);
+                document.getElementById('link2-value').textContent = `${value} cm`;
+            });
+
+            document.getElementById('apply-lengths-btn').addEventListener('click', () => {
+                const newLink1Length = parseFloat(document.getElementById('link1-length').value);
+                const newLink2Length = parseFloat(document.getElementById('link2-length').value);
+                
+                // Validar valores
+                if (isNaN(newLink1Length) || isNaN(newLink2Length) || 
+                    newLink1Length < 10 || newLink2Length < 15 ||
+                    newLink1Length > 25 || newLink2Length > 30) {
+                    alert('Por favor ingresa valores válidos:\n- Eslabón 1: 10-25 cm\n- Eslabón 2: 15-30 cm');
+                    return;
+                }
+                
+                // Eliminar TODOS los eslabones antiguos
+                console.log('Eliminando eslabones antiguos...');
+                removeAllLinks();
+                
+                // Actualizar configuración
+                CONFIG.link1Length = newLink1Length;
+                CONFIG.link2Length = newLink2Length;
+                
+                // Esperar a que se complete la eliminación
+                setTimeout(() => {
+                    console.log('Creando nuevos eslabones...');
+                    
+                    // Crear nuevos eslabones con las nuevas dimensiones
+                    const link1Geometry = new THREE.CylinderGeometry(0.8, 0.8, CONFIG.link1Length, 16);
+                    const link1Material = new THREE.MeshPhongMaterial({ 
+                        color: 0x2ecc71,
+                        shininess: 100,
+                        emissive: 0x1a7a42,
+                        emissiveIntensity: 0.1
+                    });
+                    link1 = new THREE.Mesh(link1Geometry, link1Material);
+                    link1.name = "LINK_1";
+                    link1.castShadow = true;
+                    scene.add(link1);
+
+                    const link2Geometry = new THREE.CylinderGeometry(0.7, 0.7, CONFIG.link2Length, 16);
+                    const link2Material = new THREE.MeshPhongMaterial({ 
+                        color: 0x3498db,
+                        shininess: 100,
+                        emissive: 0x1f5f8b,
+                        emissiveIntensity: 0.1
+                    });
+                    link2 = new THREE.Mesh(link2Geometry, link2Material);
+                    link2.name = "LINK_2";
+                    link2.castShadow = true;
+                    scene.add(link2);
+
+                    console.log('Nuevos eslabones creados:', link1, link2);
+
+                    // Recalcular posición con las nuevas longitudes
+                    updateArmPosition();
+                    
+                    // Inicializar las posiciones actuales
+                    currentArmPosition.link1.x = targetArmPosition.link1.x;
+                    currentArmPosition.link1.y = targetArmPosition.link1.y;
+                    currentArmPosition.link1.z = targetArmPosition.link1.z;
+                    currentArmPosition.link1.rotation = targetArmPosition.link1.rotation;
+                    
+                    currentArmPosition.link2.x = targetArmPosition.link2.x;
+                    currentArmPosition.link2.y = targetArmPosition.link2.y;
+                    currentArmPosition.link2.z = targetArmPosition.link2.z;
+                    currentArmPosition.link2.rotation = targetArmPosition.link2.rotation;
+                    
+                    currentArmPosition.elbow.x = targetArmPosition.elbow.x;
+                    currentArmPosition.elbow.y = targetArmPosition.elbow.y;
+                    currentArmPosition.elbow.z = targetArmPosition.elbow.z;
+                    
+                    currentArmPosition.camera.x = targetArmPosition.camera.x;
+                    currentArmPosition.camera.y = targetArmPosition.camera.y;
+                    currentArmPosition.camera.z = targetArmPosition.camera.z;
+                    currentArmPosition.camera.rotation = targetArmPosition.camera.rotation;
+                    
+                    // Aplicar posiciones inmediatamente
+                    applyArmAnimations();
+                    
+                    alert('✅ Longitudes actualizadas correctamente');
+                }, 150);
+            });
+
+            // Captura manual
+            document.getElementById('capture-manual-btn').addEventListener('click', () => {
+                capturePhoto();
+            });
+
+            // Controles automáticos
+            document.getElementById('start-scan-btn').addEventListener('click', startAutomaticScan);
+            document.getElementById('pause-scan-btn').addEventListener('click', pauseScan);
+            document.getElementById('resume-scan-btn').addEventListener('click', resumeScan);
+            document.getElementById('stop-scan-btn').addEventListener('click', stopScan);
+
+            // Velocidad de simulación
+            document.getElementById('simulation-speed').addEventListener('change', (e) => {
+                CONFIG.simulationSpeed = parseFloat(e.target.value);
+            });
+
+            // Reset
+            document.getElementById('reset-btn').addEventListener('click', resetSystem);
+
+            // Controles de modelo 3D
+            document.getElementById('model-file-input').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    console.log('Cargando archivo:', file.name);
+                    loadCustomModel(file);
+                }
+            });
+
+            document.getElementById('model-scale-slider').addEventListener('input', (e) => {
+                const scale = parseFloat(e.target.value);
+                document.getElementById('model-scale-value').textContent = `${scale.toFixed(1)}x`;
+                applyModelScale(scale);
+            });
+
+            document.getElementById('remove-model-btn').addEventListener('click', () => {
+                if (confirm('¿Deseas restaurar la taza original?')) {
+                    restoreOriginalObject();
+                }
+            });
+
+            // Vista de cámara virtual
+            document.getElementById('toggle-camera-view-btn').addEventListener('click', toggleCameraView);
+            document.getElementById('close-camera-view').addEventListener('click', toggleCameraView);
+            
+            // Control de zoom de la cámara virtual
+            document.getElementById('camera-zoom-slider').addEventListener('input', (e) => {
+                const zoomLevel = parseFloat(e.target.value);
+                updateCameraZoom(zoomLevel);
+            });
+
+            // Resize
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function setMode(mode) {
+            isAutoMode = (mode === 'auto');
+            
+            document.getElementById('manual-controls').style.display = isAutoMode ? 'none' : 'block';
+            document.getElementById('auto-controls').style.display = isAutoMode ? 'block' : 'none';
+            
+            document.getElementById('manual-mode-btn').className = isAutoMode ? 'btn-secondary' : 'btn-primary';
+            document.getElementById('auto-mode-btn').className = isAutoMode ? 'btn-primary' : 'btn-secondary';
+            
+            document.getElementById('current-mode').textContent = isAutoMode ? 'Automático' : 'Manual';
+        }
+
+        let scanInterval;
+        let currentScanLevel = 1;
+        let currentScanRotation = 0;
+
+        function startAutomaticScan() {
+            if (isScanning) return;
+            
+            isScanning = true;
+            isPaused = false;
+            currentScanLevel = 1;
+            currentScanRotation = 0;
+            
+            document.getElementById('start-scan-btn').style.display = 'none';
+            document.getElementById('pause-scan-btn').style.display = 'block';
+            document.getElementById('stop-scan-btn').style.display = 'block';
+            
+            // Resetear progreso
+            updateProgress(0);
+            
+            // Mover al nivel 1
+            CONFIG.currentLevel = currentScanLevel;
+            CONFIG.currentBaseRotation = currentScanRotation;
+            updateArmPosition();
+            
+            // Inicializar posiciones actuales para animación suave desde el inicio
+            currentArmPosition.link1.x = targetArmPosition.link1.x;
+            currentArmPosition.link1.y = targetArmPosition.link1.y;
+            currentArmPosition.link1.z = targetArmPosition.link1.z;
+            currentArmPosition.link1.rotation = targetArmPosition.link1.rotation;
+            
+            currentArmPosition.link2.x = targetArmPosition.link2.x;
+            currentArmPosition.link2.y = targetArmPosition.link2.y;
+            currentArmPosition.link2.z = targetArmPosition.link2.z;
+            currentArmPosition.link2.rotation = targetArmPosition.link2.rotation;
+            
+            currentArmPosition.elbow.x = targetArmPosition.elbow.x;
+            currentArmPosition.elbow.y = targetArmPosition.elbow.y;
+            currentArmPosition.elbow.z = targetArmPosition.elbow.z;
+            
+            currentArmPosition.camera.x = targetArmPosition.camera.x;
+            currentArmPosition.camera.y = targetArmPosition.camera.y;
+            currentArmPosition.camera.z = targetArmPosition.camera.z;
+            currentArmPosition.camera.rotation = targetArmPosition.camera.rotation;
+            
+            // Resetear rotación de la base
+            currentBaseRotation = 0;
+            targetBaseRotation = 0;
+            
+            // Esperar un momento para que todo se inicialice
+            setTimeout(() => {
+                performScan();
+            }, 500);
+        }
+
+        function performScan() {
+            if (!isScanning || isPaused) return;
+
+            // Capturar foto en la posición actual
+            CONFIG.currentBaseRotation = currentScanRotation;
+            
+            // Esperar a que la animación llegue a la posición antes de capturar
+            const rotDiff = Math.abs(currentBaseRotation - targetBaseRotation);
+            if (rotDiff < 0.1) { // Ya llegó a la posición
+                capturePhoto();
+
+                // Calcular progreso
+                const totalSteps = 5 * (360 / CONFIG.captureIncrement);
+                const currentStep = (currentScanLevel - 1) * (360 / CONFIG.captureIncrement) + 
+                                  (currentScanRotation / CONFIG.captureIncrement);
+                const progress = (currentStep / totalSteps) * 100;
+                updateProgress(progress);
+
+                // Actualizar displays
+                document.getElementById('current-level').textContent = currentScanLevel;
+                document.getElementById('current-base-angle').textContent = `${currentScanRotation}°`;
+
+                // Incrementar rotación para la siguiente captura
+                currentScanRotation += CONFIG.captureIncrement;
+
+                if (currentScanRotation >= 360) {
+                    // Completó una vuelta, pasar al siguiente nivel
+                    currentScanRotation = 0;
+                    currentScanLevel++;
+
+                    if (currentScanLevel > 5) {
+                        // Escaneo completo
+                        stopScan();
+                        alert('¡Escaneo completado! Total de capturas: ' + totalCaptures);
+                        return;
+                    }
+
+                    // Mover al siguiente nivel
+                    CONFIG.currentLevel = currentScanLevel;
+                    updateArmPosition();
+
+                    // Pausa breve entre niveles para que se vea la transición
+                    setTimeout(() => {
+                        if (isScanning && !isPaused) {
+                            performScan();
+                        }
+                    }, 1500 / CONFIG.simulationSpeed);
+                } else {
+                    // Continuar en el mismo nivel
+                    setTimeout(() => {
+                        if (isScanning && !isPaused) {
+                            performScan();
+                        }
+                    }, 800 / CONFIG.simulationSpeed);
+                }
+            } else {
+                // Esperar a que termine la animación
+                setTimeout(() => {
+                    if (isScanning && !isPaused) {
+                        performScan();
+                    }
+                }, 100);
+            }
+        }
+
+        function pauseScan() {
+            isPaused = true;
+            document.getElementById('pause-scan-btn').style.display = 'none';
+            document.getElementById('resume-scan-btn').style.display = 'block';
+        }
+
+        function resumeScan() {
+            isPaused = false;
+            document.getElementById('pause-scan-btn').style.display = 'block';
+            document.getElementById('resume-scan-btn').style.display = 'none';
+            performScan();
+        }
+
+        function stopScan() {
+            isScanning = false;
+            isPaused = false;
+            
+            document.getElementById('start-scan-btn').style.display = 'block';
+            document.getElementById('pause-scan-btn').style.display = 'none';
+            document.getElementById('resume-scan-btn').style.display = 'none';
+        }
+
+        function updateProgress(percent) {
+            const fill = document.getElementById('progress-fill');
+            fill.style.width = `${percent}%`;
+            fill.textContent = `${Math.round(percent)}%`;
+        }
+
+        function resetSystem() {
+            // Detener escaneo si está activo
+            stopScan();
+            
+            // Resetear configuración
+            CONFIG.currentLevel = 5;
+            CONFIG.currentBaseRotation = 0;
+            CONFIG.link1Length = 15;
+            CONFIG.link2Length = 20;
+            totalCaptures = 0;
+
+            // Limpiar puntos de captura
+            capturePoints.forEach(point => {
+                scene.remove(point);
+                if (point.geometry) point.geometry.dispose();
+                if (point.material) point.material.dispose();
+            });
+            capturePoints = [];
+
+            // Resetear controles
+            document.getElementById('base-rotation').value = 0;
+            document.getElementById('rail-level').value = 5;
+            document.getElementById('link1-length').value = 15;
+            document.getElementById('link2-length').value = 20;
+            document.getElementById('link1-value').textContent = '15 cm';
+            document.getElementById('link2-value').textContent = '20 cm';
+            document.getElementById('total-captures').textContent = '0';
+
+            // Resetear rotaciones
+            currentBaseRotation = 0;
+            targetBaseRotation = 0;
+
+            // Recrear eslabones con dimensiones por defecto
+            if (link1) {
+                scene.remove(link1);
+                if (link1.geometry) link1.geometry.dispose();
+                if (link1.material) link1.material.dispose();
+            }
+            if (link2) {
+                scene.remove(link2);
+                if (link2.geometry) link2.geometry.dispose();
+                if (link2.material) link2.material.dispose();
+            }
+            
+            const link1Geometry = new THREE.CylinderGeometry(0.8, 0.8, CONFIG.link1Length, 16);
+            const link1Material = new THREE.MeshPhongMaterial({ 
+                color: 0x2ecc71,
+                shininess: 100,
+                emissive: 0x1a7a42,
+                emissiveIntensity: 0.1
+            });
+            link1 = new THREE.Mesh(link1Geometry, link1Material);
+            link1.castShadow = true;
+            scene.add(link1);
+
+            const link2Geometry = new THREE.CylinderGeometry(0.7, 0.7, CONFIG.link2Length, 16);
+            const link2Material = new THREE.MeshPhongMaterial({ 
+                color: 0x3498db,
+                shininess: 100,
+                emissive: 0x1f5f8b,
+                emissiveIntensity: 0.1
+            });
+            link2 = new THREE.Mesh(link2Geometry, link2Material);
+            link2.castShadow = true;
+            scene.add(link2);
+
+            updateProgress(0);
+            updateArmPosition();
+            
+            // Sincronizar posiciones actuales con las objetivo
+            setTimeout(() => {
+                currentArmPosition.link1.x = targetArmPosition.link1.x;
+                currentArmPosition.link1.y = targetArmPosition.link1.y;
+                currentArmPosition.link1.z = targetArmPosition.link1.z;
+                currentArmPosition.link1.rotation = targetArmPosition.link1.rotation;
+                
+                currentArmPosition.link2.x = targetArmPosition.link2.x;
+                currentArmPosition.link2.y = targetArmPosition.link2.y;
+                currentArmPosition.link2.z = targetArmPosition.link2.z;
+                currentArmPosition.link2.rotation = targetArmPosition.link2.rotation;
+                
+                currentArmPosition.elbow.x = targetArmPosition.elbow.x;
+                currentArmPosition.elbow.y = targetArmPosition.elbow.y;
+                currentArmPosition.elbow.z = targetArmPosition.elbow.z;
+                
+                currentArmPosition.camera.x = targetArmPosition.camera.x;
+                currentArmPosition.camera.y = targetArmPosition.camera.y;
+                currentArmPosition.camera.z = targetArmPosition.camera.z;
+                currentArmPosition.camera.rotation = targetArmPosition.camera.rotation;
+            }, 100);
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('canvas-container');
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        // Iniciar aplicación
+        init();
+    </script>
+</body>
+</html>
