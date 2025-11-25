@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kairos - Asistente 3D</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="logo.ico">
+</head>
+<body>
+    <div class="container">
+        <!-- Background 3D Elements -->
+        <div class="background-elements">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="grid-background"></div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-content">
+                <!-- Project Info -->
+                <section class="info-section">
+                    <h3 class="section-title">Proyecto</h3>
+                    <div class="project-info">
+                        <div class="info-item">
+                            <span class="info-label">Sistema:</span>
+                            <span class="info-value">Escaneo 3D</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Componente:</span>
+                            <span class="info-value">Brazo Robótico</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Estado:</span>
+                            <span class="info-value status-active">Activo</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Questions -->
+                <section class="quick-section">
+                    <h3 class="section-title">Preguntas Rápidas</h3>
+                    <div class="quick-buttons">
+                        <button class="quick-btn" onclick="sendQuickQuestion('¿Cómo funciona el brazo robótico?')">
+                            ⚙️ Brazo Robótico
+                        </button>
+                        <button class="quick-btn" onclick="sendQuickQuestion('¿Cuáles son los parámetros de escaneo?')">
+                            📊 Parámetros
+                        </button>
+                        <button class="quick-btn" onclick="sendQuickQuestion('¿Cómo exporto los datos?')">
+                            💾 Exportar
+                        </button>
+                        <button class="quick-btn" onclick="sendQuickQuestion('¿Cuántos ángulos puede capturar?')">
+                            📷 Ángulos
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Stats -->
+                <section class="stats-section">
+                    <h3 class="section-title">Estadísticas</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="messageCount">0</div>
+                            <div class="stat-label">Preguntas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="sessionTime">00:00</div>
+                            <div class="stat-label">Sesión</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Features -->
+                <section class="features-section">
+                    <h3 class="section-title">Características</h3>
+                    <ul class="features-list">
+                        <li>🤖 IA Avanzada</li>
+                        <li>🔄 Respuestas Dinámicas</li>
+                        <li>💡 Contexto 3D</li>
+                        <li>⚡ Análisis Rápido</li>
+                    </ul>
+                </section>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <div class="main-content">
+            <!-- Header con Logo -->
+            <header class="header">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <!-- Logo upload and display -->
+                        <div class="logo-container">
+                            <img id="logoImage" class="logo-img" src="/placeholder.svg" alt="Project Logo" style="display: none;">
+                            <span id="logoPlaceholder" class="logo-placeholder">⚙️</span>
+                        </div>
+                        <label class="logo-upload" title="Cargar logo del proyecto">
+                            <input type="file" id="logoInput" accept="image/*" style="display: none;">
+                            <span class="upload-hint">Cargar Logo</span>
+                        </label>
+                    </div>
+                    <div class="kairos-header">
+                        <h1 class="kairos-title">KAIROS</h1>
+                        <p class="kairos-subtitle">Asistente de Escaneo 3D</p>
+                    </div>
+                    <div class="header-status">
+                        <p class="status-text">Sistema Conectado</p>
+                        <div class="status-pulse"></div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Chat Container -->
+            <main class="chat-container">
+                <div class="messages-wrapper">
+                    <div class="messages" id="messages">
+                        <div class="message system">
+                            <div class="message-content">
+                                <p>Hola, soy Kairos. Tu asistente especializado en simulación de escaneo 3D con brazo robótico.</p>
+                                <p class="message-hint">Puedo ayudarte con preguntas sobre:</p>
+                                <ul class="hint-list">
+                                    <li>Configuración del brazo robótico</li>
+                                    <li>Proceso de escaneo 3D</li>
+                                    <li>Parámetros de captura</li>
+                                    <li>Exportación de datos</li>
+                                </ul>
+                            </div>
+                            <span class="message-time">Ahora</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="input-area">
+                    <form id="chatForm" class="input-form">
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                id="messageInput" 
+                                placeholder="Escribe tu pregunta..." 
+                                class="message-input"
+                                autocomplete="off"
+                            >
+                            <button type="button" class="action-icon-btn" id="voiceBtn" title="Enviar por voz">
+                                <span>🎤</span>
+                            </button>
+                            <button type="button" class="action-icon-btn" id="imageBtn" title="Cargar imagen para análisis">
+                                <span>📸</span>
+                            </button>
+                            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                            <button type="submit" class="send-button" id="sendBtn">
+                                <span class="send-icon">→</span>
+                            </button>
+                        </div>
+                        <div class="input-actions">
+                            <button type="button" class="action-btn" id="clearBtn" title="Limpiar chat">
+                                <span>🗑️</span> Limpiar
+                            </button>
+                        </div>
+                        
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Loading indicator -->
+    <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

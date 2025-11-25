@@ -294,7 +294,7 @@
             font-size: 13px;
         }
 
-        /* Panel de Vista de Cámara */
+        /* Panel de Vista de CÃ¡mara */
         #camera-view-panel {
             position: absolute;
             top: 20px;
@@ -598,115 +598,115 @@
     <div id="container">
         <div id="canvas-container">
             <div id="info-display"></div>
-            <div id="capture-indicator" class="capture-indicator">📸 Captura realizada</div>
+            <div id="capture-indicator" class="capture-indicator">ðŸ“¸ Captura realizada</div>
             
-            <!-- Botón para activar/desactivar vista de cámara -->
+            <!-- BotÃ³n para activar/desactivar vista de cÃ¡mara -->
             <button id="toggle-camera-view-btn" class="toggle-camera-view-btn" 
-                    data-tooltip="Activa/desactiva la vista en tiempo real desde la cámara del brazo robótico"
+                    data-tooltip="Activa/desactiva la vista en tiempo real desde la cÃ¡mara del brazo robÃ³tico"
                     data-tooltip-pos="left">
-                📹 Vista de Cámara
+                ðŸ“¹ Vista de CÃ¡mara
             </button>
             
-            <!-- Panel de Vista de Cámara -->
+            <!-- Panel de Vista de CÃ¡mara -->
             <div id="camera-view-panel">
                 <div class="camera-view-header">
-                    <span>📹 Vista desde la Cámara</span>
+                    <span>ðŸ“¹ Vista desde la CÃ¡mara</span>
                     <button class="camera-view-close" id="close-camera-view"
-                            data-tooltip="Cierra el panel de vista de cámara"
-                            data-tooltip-pos="left">✕</button>
+                            data-tooltip="Cierra el panel de vista de cÃ¡mara"
+                            data-tooltip-pos="left">âœ•</button>
                 </div>
                 <canvas id="camera-view-canvas"></canvas>
                 <div class="camera-zoom-controls">
-                    <label>🔍 Zoom:</label>
+                    <label>ðŸ” Zoom:</label>
                     <input type="range" id="camera-zoom-slider" min="1" max="3" value="1" step="0.1"
-                           data-tooltip="Ajusta el nivel de zoom de la cámara virtual (1x-3x)"
+                           data-tooltip="Ajusta el nivel de zoom de la cÃ¡mara virtual (1x-3x)"
                            data-tooltip-pos="top">
                     <span id="camera-zoom-value" class="camera-zoom-value">1.0x</span>
                 </div>
                 <div class="camera-view-info">
-                    Vista en tiempo real desde la perspectiva de la cámara del brazo robótico
+                    Vista en tiempo real desde la perspectiva de la cÃ¡mara del brazo robÃ³tico
                 </div>
             </div>
         </div>
         <div id="control-panel">
-            <h1>🤖 Simulador de Escaneo 3D</h1>
+            <h1>ðŸ¤– Simulador de Escaneo 3D</h1>
             
             <div class="mode-selector">
                 <button id="manual-mode-btn" class="btn-primary" 
-                        data-tooltip="Controla el brazo manualmente con sliders de rotación y nivel"
+                        data-tooltip="Controla el brazo manualmente con sliders de rotaciÃ³n y nivel"
                         data-tooltip-pos="bottom">Manual</button>
                 <button id="auto-mode-btn" class="btn-secondary"
-                        data-tooltip="Inicia un escaneo automático completo del objeto en 5 niveles"
-                        data-tooltip-pos="bottom">Automático</button>
+                        data-tooltip="Inicia un escaneo automÃ¡tico completo del objeto en 5 niveles"
+                        data-tooltip-pos="bottom">AutomÃ¡tico</button>
             </div>
 
-            <h2>⚙️ Configuración del Brazo</h2>
+            <h2>âš™ï¸ ConfiguraciÃ³n del Brazo</h2>
             <div class="control-group">
-                <label>Longitud Eslabón 1 (Base-Codo): <span id="link1-value" class="value-display">15 cm</span></label>
+                <label>Longitud EslabÃ³n 1 (Base-Codo): <span id="link1-value" class="value-display">15 cm</span></label>
                 <input type="number" id="link1-length" min="10" max="25" value="15" step="0.5"
-                       data-tooltip="Longitud del primer eslabón del brazo (10-25 cm)"
+                       data-tooltip="Longitud del primer eslabÃ³n del brazo (10-25 cm)"
                        data-tooltip-pos="right">
                 
-                <label style="margin-top: 10px;">Longitud Eslabón 2 (Codo-Cámara): <span id="link2-value" class="value-display">20 cm</span></label>
+                <label style="margin-top: 10px;">Longitud EslabÃ³n 2 (Codo-CÃ¡mara): <span id="link2-value" class="value-display">20 cm</span></label>
                 <input type="number" id="link2-length" min="15" max="30" value="20" step="0.5"
-                       data-tooltip="Longitud del segundo eslabón del brazo (15-30 cm)"
+                       data-tooltip="Longitud del segundo eslabÃ³n del brazo (15-30 cm)"
                        data-tooltip-pos="right">
                 
                 <button id="apply-lengths-btn" class="btn-success" style="margin-top: 10px;"
-                        data-tooltip="Aplica las nuevas longitudes y reconstruye el brazo robótico"
+                        data-tooltip="Aplica las nuevas longitudes y reconstruye el brazo robÃ³tico"
                         data-tooltip-pos="bottom">Aplicar Cambios</button>
             </div>
 
             <!-- Controles Manuales -->
             <div id="manual-controls">
-                <h2>🎮 Control Manual</h2>
+                <h2>ðŸŽ® Control Manual</h2>
                 <div class="control-group">
-                    <label>Rotación Base: <span id="base-rotation-value" class="value-display">0°</span></label>
+                    <label>RotaciÃ³n Base: <span id="base-rotation-value" class="value-display">0Â°</span></label>
                     <div class="slider-container">
                         <input type="range" id="base-rotation" min="0" max="360" value="0" step="22.5"
-                               data-tooltip="Rota la base circular sobre la que está el objeto (0-360°)"
+                               data-tooltip="Rota la base circular sobre la que estÃ¡ el objeto (0-360Â°)"
                                data-tooltip-pos="top">
                     </div>
 
-                    <label style="margin-top: 15px;">Nivel del Rail: <span id="rail-level-value" class="value-display">Nivel 5 (90°)</span></label>
+                    <label style="margin-top: 15px;">Nivel del Rail: <span id="rail-level-value" class="value-display">Nivel 5 (90Â°)</span></label>
                     <div class="slider-container">
                         <input type="range" id="rail-level" min="1" max="5" value="5" step="1"
-                               data-tooltip="Ajusta la altura del brazo en el rail guía (5 niveles disponibles)"
+                               data-tooltip="Ajusta la altura del brazo en el rail guÃ­a (5 niveles disponibles)"
                                data-tooltip-pos="top">
                     </div>
 
                     <button id="capture-manual-btn" class="btn-success" style="margin-top: 15px;"
-                            data-tooltip="Captura una foto desde la posición actual de la cámara"
-                            data-tooltip-pos="bottom">📷 Capturar Foto</button>
+                            data-tooltip="Captura una foto desde la posiciÃ³n actual de la cÃ¡mara"
+                            data-tooltip-pos="bottom">ðŸ“· Capturar Foto</button>
                 </div>
             </div>
 
-            <!-- Controles Automáticos -->
+            <!-- Controles AutomÃ¡ticos -->
             <div id="auto-controls" style="display: none;">
-                <h2>⚡ Control Automático</h2>
+                <h2>âš¡ Control AutomÃ¡tico</h2>
                 <div class="control-group">
-                    <label>Velocidad de Simulación:</label>
+                    <label>Velocidad de SimulaciÃ³n:</label>
                     <select id="simulation-speed" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;"
-                            data-tooltip="Ajusta la velocidad del escaneo automático"
+                            data-tooltip="Ajusta la velocidad del escaneo automÃ¡tico"
                             data-tooltip-pos="right">
                         <option value="0.5">Muy Lenta (0.5x)</option>
                         <option value="1" selected>Normal (1x)</option>
-                        <option value="2">Rápida (2x)</option>
-                        <option value="3">Muy Rápida (3x)</option>
+                        <option value="2">RÃ¡pida (2x)</option>
+                        <option value="3">Muy RÃ¡pida (3x)</option>
                     </select>
 
                     <button id="start-scan-btn" class="btn-primary" style="margin-top: 15px;"
-                            data-tooltip="Inicia el escaneo automático desde el nivel 1 hasta el nivel 5"
-                            data-tooltip-pos="bottom">▶️ Iniciar Escaneo</button>
+                            data-tooltip="Inicia el escaneo automÃ¡tico desde el nivel 1 hasta el nivel 5"
+                            data-tooltip-pos="bottom">â–¶ï¸ Iniciar Escaneo</button>
                     <button id="pause-scan-btn" class="btn-secondary" style="display: none;"
-                            data-tooltip="Pausa el escaneo en la posición actual"
-                            data-tooltip-pos="bottom">⏸️ Pausar</button>
+                            data-tooltip="Pausa el escaneo en la posiciÃ³n actual"
+                            data-tooltip-pos="bottom">â¸ï¸ Pausar</button>
                     <button id="resume-scan-btn" class="btn-success" style="display: none;"
-                            data-tooltip="Continúa el escaneo desde donde se pausó"
-                            data-tooltip-pos="bottom">▶️ Continuar</button>
+                            data-tooltip="ContinÃºa el escaneo desde donde se pausÃ³"
+                            data-tooltip-pos="bottom">â–¶ï¸ Continuar</button>
                     <button id="stop-scan-btn" class="btn-danger"
                             data-tooltip="Detiene el escaneo y regresa al estado inicial"
-                            data-tooltip-pos="bottom">⏹️ Detener</button>
+                            data-tooltip-pos="bottom">â¹ï¸ Detener</button>
 
                     <div class="progress-bar" style="margin-top: 15px;">
                         <div id="progress-fill" class="progress-fill">0%</div>
@@ -714,7 +714,7 @@
                 </div>
             </div>
 
-            <h2>📊 Estado del Sistema</h2>
+            <h2>ðŸ“Š Estado del Sistema</h2>
             <div class="status-box">
                 <div class="status-item">
                     <span class="status-label">Capturas Totales:</span>
@@ -725,12 +725,12 @@
                     <span id="current-level" class="status-value">5</span>
                 </div>
                 <div class="status-item">
-                    <span class="status-label">Ángulo Base:</span>
-                    <span id="current-base-angle" class="status-value">0°</span>
+                    <span class="status-label">Ãngulo Base:</span>
+                    <span id="current-base-angle" class="status-value">0Â°</span>
                 </div>
                 <div class="status-item">
-                    <span class="status-label">Ángulo Codo:</span>
-                    <span id="elbow-angle-display" class="status-value">0°</span>
+                    <span class="status-label">Ãngulo Codo:</span>
+                    <span id="elbow-angle-display" class="status-value">0Â°</span>
                 </div>
                 <div class="status-item">
                     <span class="status-label">Modo:</span>
@@ -738,7 +738,7 @@
                 </div>
             </div>
 
-            <h2>📦 Objeto a Escanear</h2>
+            <h2>ðŸ“¦ Objeto a Escanear</h2>
             <div class="control-group">
                 <label>Cargar Modelo 3D:</label>
                 <input type="file" id="model-file-input" accept=".obj,.stl,.gltf,.glb" 
@@ -749,25 +749,25 @@
                 <label style="margin-top: 15px;">Escala del Modelo: <span id="model-scale-value" class="value-display">1.0x</span></label>
                 <div class="slider-container">
                     <input type="range" id="model-scale-slider" min="0.1" max="3" value="1" step="0.1"
-                           data-tooltip="Ajusta el tamaño del modelo cargado (0.1x a 3x)"
+                           data-tooltip="Ajusta el tamaÃ±o del modelo cargado (0.1x a 3x)"
                            data-tooltip-pos="top">
                 </div>
                 
                 <button id="remove-model-btn" class="btn-secondary" style="margin-top: 10px;"
                         data-tooltip="Elimina el modelo actual y restaura la taza por defecto"
-                        data-tooltip-pos="bottom">🗑️ Restaurar Taza Original</button>
+                        data-tooltip-pos="bottom">ðŸ—‘ï¸ Restaurar Taza Original</button>
                 
                 <div class="warning" style="margin-top: 10px;">
-                    💡 Formatos soportados: OBJ, STL, GLTF/GLB
+                    ðŸ’¡ Formatos soportados: OBJ, STL, GLTF/GLB
                 </div>
             </div>
 
             <button id="reset-btn" class="btn-danger" style="margin-top: 20px;"
                     data-tooltip="Reinicia el sistema a su estado inicial y elimina todas las capturas"
-                    data-tooltip-pos="bottom">🔄 Resetear Sistema</button>
+                    data-tooltip-pos="bottom">ðŸ”„ Resetear Sistema</button>
             
             <div class="warning" style="margin-top: 15px;">
-                ⚠️ El brazo se ajustará automáticamente para mantener la cámara en el rail guiador.
+                âš ï¸ El brazo se ajustarÃ¡ automÃ¡ticamente para mantener la cÃ¡mara en el rail guiador.
             </div>
         </div>
     </div>
@@ -780,7 +780,7 @@
         // Variables globales
         let scene, camera, renderer, controls;
         let rotatingBase, guidingRail, armBase, link1, link2, cameraHead, elbowJoint;
-        let cameraLens = null; // Lente de la cámara
+        let cameraLens = null; // Lente de la cÃ¡mara
         let capturePoints = [];
         let isAutoMode = false;
         let isScanning = false;
@@ -792,11 +792,11 @@
         let customModel = null; // Modelo 3D cargado por el usuario
         let modelScale = 1.0; // Escala del modelo
         
-        // Variables para la vista de cámara virtual
-        let virtualCamera = null; // Cámara que simula la perspectiva del cabezal
-        let cameraViewRenderer = null; // Renderer para la vista de cámara
-        let cameraViewActive = false; // Estado de la vista de cámara
-        let cameraZoom = 1.0; // Nivel de zoom de la cámara virtual (1.0 = normal, 2.0 = 2x zoom)
+        // Variables para la vista de cÃ¡mara virtual
+        let virtualCamera = null; // CÃ¡mara que simula la perspectiva del cabezal
+        let cameraViewRenderer = null; // Renderer para la vista de cÃ¡mara
+        let cameraViewActive = false; // Estado de la vista de cÃ¡mara
+        let cameraZoom = 1.0; // Nivel de zoom de la cÃ¡mara virtual (1.0 = normal, 2.0 = 2x zoom)
         
         // Variables para animaciones suaves
         let targetBaseRotation = 0;
@@ -814,24 +814,24 @@
             elbow: { x: 0, y: 0, z: 0 }
         };
         
-        // Configuración del sistema
+        // ConfiguraciÃ³n del sistema
         const CONFIG = {
             baseRadius: 15, // cm
             railRadius: 17, // cm
             scanAreaRadius: 15, // cm
-            railHeightOffset: 4, // cm - elevación del rail sobre la base (aumentado de 2 a 4)
-            armBaseOffset: 5, // cm - distancia hacia atrás del rail
+            railHeightOffset: 4, // cm - elevaciÃ³n del rail sobre la base (aumentado de 2 a 4)
+            armBaseOffset: 5, // cm - distancia hacia atrÃ¡s del rail
             link1Length: 15, // cm (ajustable)
             link2Length: 20, // cm (ajustable)
             captureIncrement: 22.5, // grados por captura
-            railLevels: [0, 22.5, 45, 67.5, 90], // ángulos de los 5 niveles
-            currentLevel: 5, // empezamos en nivel 5 (90°)
+            railLevels: [0, 22.5, 45, 67.5, 90], // Ã¡ngulos de los 5 niveles
+            currentLevel: 5, // empezamos en nivel 5 (90Â°)
             currentBaseRotation: 0,
             simulationSpeed: 1,
-            animationSpeed: 0.15 // Velocidad de interpolación (más bajo = más suave)
+            animationSpeed: 0.15 // Velocidad de interpolaciÃ³n (mÃ¡s bajo = mÃ¡s suave)
         };
 
-        // Función para eliminar COMPLETAMENTE todos los eslabones antiguos
+        // FunciÃ³n para eliminar COMPLETAMENTE todos los eslabones antiguos
         function removeAllLinks() {
             // Array para almacenar objetos a eliminar
             const toRemove = [];
@@ -855,7 +855,7 @@
                 }
             });
             
-            // También intentar eliminar por referencia directa
+            // TambiÃ©n intentar eliminar por referencia directa
             if (link1 && link1.parent) {
                 link1.parent.remove(link1);
                 if (link1.geometry) link1.geometry.dispose();
@@ -879,13 +879,13 @@
             console.log('Todos los eslabones han sido eliminados. Objetos removidos:', toRemove.length);
         }
 
-        // Función para remover el objeto actual de escaneo
+        // FunciÃ³n para remover el objeto actual de escaneo
         function removeCurrentObject() {
             if (scanningObject) {
                 if (scanningObject.parent) {
                     scanningObject.parent.remove(scanningObject);
                 }
-                // Limpiar geometrías y materiales
+                // Limpiar geometrÃ­as y materiales
                 scanningObject.traverse((child) => {
                     if (child.geometry) child.geometry.dispose();
                     if (child.material) {
@@ -907,7 +907,7 @@
             }
         }
 
-        // Función para cargar modelo 3D
+        // FunciÃ³n para cargar modelo 3D
         function loadCustomModel(file) {
             const fileName = file.name.toLowerCase();
             const reader = new FileReader();
@@ -982,7 +982,7 @@
                 // Usar STLLoader de Three.js para manejar ambos formatos
                 const loader = new THREE.STLLoader();
                 
-                // Convertir ArrayBuffer a geometría
+                // Convertir ArrayBuffer a geometrÃ­a
                 const geometry = loader.parse(arrayBuffer);
                 
                 if (geometry && geometry.attributes && geometry.attributes.position) {
@@ -990,11 +990,11 @@
                     createModelFromGeometry(geometry);
                     console.log('Archivo STL cargado exitosamente');
                 } else {
-                    throw new Error('Geometría STL inválida');
+                    throw new Error('GeometrÃ­a STL invÃ¡lida');
                 }
             } catch (error) {
                 console.error('Error al cargar STL:', error);
-                alert('❌ Error al cargar el archivo STL.\n\nAsegúrate de que sea un archivo STL válido (ASCII o binario).');
+                alert('âŒ Error al cargar el archivo STL.\n\nAsegÃºrate de que sea un archivo STL vÃ¡lido (ASCII o binario).');
                 restoreOriginalObject();
             }
         }
@@ -1004,15 +1004,15 @@
             alert('Para soporte completo de GLTF/GLB, se requiere el GLTFLoader.\n\nPor ahora, usa formatos OBJ o STL.\n\nSi necesitas GLTF, puedes convertir tu modelo a OBJ usando herramientas online.');
         }
 
-        // Crear modelo desde geometría
+        // Crear modelo desde geometrÃ­a
         function createModelFromGeometry(geometry) {
-            // Centrar geometría y calcular bounding box
+            // Centrar geometrÃ­a y calcular bounding box
             geometry.computeBoundingBox();
             const boundingBox = geometry.boundingBox;
             const center = new THREE.Vector3();
             boundingBox.getCenter(center);
             
-            // Obtener el tamaño del modelo
+            // Obtener el tamaÃ±o del modelo
             const size = new THREE.Vector3();
             boundingBox.getSize(size);
             
@@ -1020,13 +1020,13 @@
             // Solo trasladar en X y Z para centrar, y en Y para que la parte inferior quede en y=0
             geometry.translate(-center.x, -boundingBox.min.y, -center.z);
             
-            // Recalcular bounding box después de la traslación
+            // Recalcular bounding box despuÃ©s de la traslaciÃ³n
             geometry.computeBoundingBox();
             const newBoundingBox = geometry.boundingBox;
             const newSize = new THREE.Vector3();
             newBoundingBox.getSize(newSize);
             
-            // Calcular escala para que quepa en el área (máximo 8cm)
+            // Calcular escala para que quepa en el Ã¡rea (mÃ¡ximo 8cm)
             const maxDim = Math.max(newSize.x, newSize.y, newSize.z);
             const autoScale = 8 / maxDim;
             
@@ -1064,9 +1064,9 @@
             document.getElementById('model-scale-value').textContent = '1.0x';
             
             console.log('Modelo cargado. Auto-escala aplicada:', autoScale);
-            console.log('Tamaño del modelo:', newSize);
-            console.log('Posición del modelo:', modelGroup.position);
-            alert('✅ Modelo 3D cargado correctamente!\n\nEl objeto está posicionado sobre la base rotatoria.\nPuedes ajustar la escala con el slider si es necesario.');
+            console.log('TamaÃ±o del modelo:', newSize);
+            console.log('PosiciÃ³n del modelo:', modelGroup.position);
+            alert('âœ… Modelo 3D cargado correctamente!\n\nEl objeto estÃ¡ posicionado sobre la base rotatoria.\nPuedes ajustar la escala con el slider si es necesario.');
         }
 
         // Aplicar escala al modelo
@@ -1093,7 +1093,7 @@
             modelScale = 1.0;
         }
 
-        // Función de easing para animaciones suaves
+        // FunciÃ³n de easing para animaciones suaves
         function easeInOutCubic(t) {
             return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
         }
@@ -1109,7 +1109,7 @@
             scene.background = new THREE.Color(0xf0f0f0);
             scene.fog = new THREE.Fog(0xf0f0f0, 50, 200);
 
-            // Configurar cámara
+            // Configurar cÃ¡mara
             camera = new THREE.PerspectiveCamera(
                 60,
                 (window.innerWidth - 350) / window.innerHeight,
@@ -1127,14 +1127,14 @@
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             container.appendChild(renderer.domElement);
 
-            // Controles de órbita
+            // Controles de Ã³rbita
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.minDistance = 20;
             controls.maxDistance = 100;
 
-            // Iluminación
+            // IluminaciÃ³n
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
 
@@ -1165,16 +1165,16 @@
             createArticulatedArm();
             createObjectToScan();
 
-            // Inicializar vista de cámara virtual
+            // Inicializar vista de cÃ¡mara virtual
             initCameraView();
 
-            // Iniciar animación
+            // Iniciar animaciÃ³n
             animate();
 
             // Event listeners
             setupEventListeners();
             
-            // Actualizar posición inicial y sincronizar posiciones actuales
+            // Actualizar posiciÃ³n inicial y sincronizar posiciones actuales
             updateArmPosition();
             
             // Inicializar las posiciones actuales para coincidir con las objetivo
@@ -1199,7 +1199,7 @@
                 currentArmPosition.camera.z = targetArmPosition.camera.z;
                 currentArmPosition.camera.rotation = targetArmPosition.camera.rotation;
                 
-                // Iniciar demo automática después de 1.5 segundos
+                // Iniciar demo automÃ¡tica despuÃ©s de 1.5 segundos
                 if (isFirstLoad) {
                     setTimeout(() => {
                         startInitialDemo();
@@ -1208,11 +1208,11 @@
             }, 100);
         }
 
-        // Función para la demostración automática inicial
+        // FunciÃ³n para la demostraciÃ³n automÃ¡tica inicial
         function startInitialDemo() {
-            console.log('Iniciando demostración automática...');
+            console.log('Iniciando demostraciÃ³n automÃ¡tica...');
             
-            // Cambiar a modo automático
+            // Cambiar a modo automÃ¡tico
             setMode('auto');
             
             // Crear overlay de bienvenida
@@ -1255,12 +1255,12 @@
                     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
                 ">
                     <h2 style="color: #667eea; margin-bottom: 20px; font-size: 28px;">
-                        🤖 Bienvenido al Simulador de Escaneo 3D
+                        ðŸ¤– Bienvenido al Simulador de Escaneo 3D
                     </h2>
                     <p style="color: #555; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
-                        Este simulador muestra cómo funciona un sistema de escaneo 3D con brazo robótico articulado y base rotatoria.
+                        Este simulador muestra cÃ³mo funciona un sistema de escaneo 3D con brazo robÃ³tico articulado y base rotatoria.
                         <br><br>
-                        <strong>¿Deseas ver una demostración rápida del proceso completo de escaneo?</strong>
+                        <strong>Â¿Deseas ver una demostraciÃ³n rÃ¡pida del proceso completo de escaneo?</strong>
                     </p>
                     <button id="start-demo-btn" style="
                         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -1275,7 +1275,7 @@
                         transition: transform 0.2s;
                     " onmouseover="this.style.transform='translateY(-2px)'" 
                        onmouseout="this.style.transform='translateY(0)'">
-                        ▶️ Ver Demostración
+                        â–¶ï¸ Ver DemostraciÃ³n
                     </button>
                     <br>
                     <button id="skip-demo-btn" style="
@@ -1308,11 +1308,11 @@
                 isFirstLoad = false;
                 setMode('manual');
                 
-                // IMPORTANTE: Asegurarse de que los eslabones existan y estén añadidos a la escena
+                // IMPORTANTE: Asegurarse de que los eslabones existan y estÃ©n aÃ±adidos a la escena
                 // Si no existen, crearlos
                 if (!link1 || !link1.parent) {
                     console.log('Creando eslabones tras saltar demo...');
-                    // Eliminar cualquier eslabón residual
+                    // Eliminar cualquier eslabÃ³n residual
                     removeAllLinks();
                     
                     // Crear nuevos eslabones
@@ -1343,7 +1343,7 @@
                     scene.add(link2);
                 }
                 
-                // Actualizar posición y sincronizar
+                // Actualizar posiciÃ³n y sincronizar
                 updateArmPosition();
                 setTimeout(() => {
                     currentArmPosition.link1.x = targetArmPosition.link1.x;
@@ -1368,12 +1368,12 @@
             });
         }
 
-        // Función para ejecutar la demo rápida
+        // FunciÃ³n para ejecutar la demo rÃ¡pida
         function runQuickDemo() {
-            console.log('Ejecutando demo rápida...');
+            console.log('Ejecutando demo rÃ¡pida...');
             isFirstLoad = false;
             
-            // Configurar velocidad muy rápida para la demo
+            // Configurar velocidad muy rÃ¡pida para la demo
             CONFIG.simulationSpeed = 3;
             document.getElementById('simulation-speed').value = '3';
             
@@ -1425,7 +1425,7 @@
                     box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
                     animation: slideDown 0.5s;
                 `;
-                demoMsg.innerHTML = '🎬 Demostración en progreso...';
+                demoMsg.innerHTML = 'ðŸŽ¬ DemostraciÃ³n en progreso...';
                 document.body.appendChild(demoMsg);
                 
                 // Iniciar el escaneo
@@ -1437,10 +1437,10 @@
                         document.body.removeChild(document.getElementById('demo-message'));
                     }
                     
-                    // Mostrar mensaje de finalización
+                    // Mostrar mensaje de finalizaciÃ³n
                     const completeMsg = document.createElement('div');
                     completeMsg.style.cssText = demoMsg.style.cssText.replace('slideDown', 'fadeIn');
-                    completeMsg.innerHTML = '✅ ¡Demostración completada! Ahora puedes usar el simulador';
+                    completeMsg.innerHTML = 'âœ… Â¡DemostraciÃ³n completada! Ahora puedes usar el simulador';
                     document.body.appendChild(completeMsg);
                     
                     setTimeout(() => {
@@ -1457,7 +1457,7 @@
         }
 
         function createRotatingBase() {
-            // Grupo para la plataforma rotatoria (ESTA SÍ ROTA)
+            // Grupo para la plataforma rotatoria (ESTA SÃ ROTA)
             rotatingBase = new THREE.Group();
             rotatingBase.position.set(0, 0, 0); // Centro de la escena
             scene.add(rotatingBase);
@@ -1492,7 +1492,7 @@
             platformSurface.receiveShadow = true;
             rotatingBase.add(platformSurface);
 
-            // Marcador de dirección en la plataforma (flecha roja)
+            // Marcador de direcciÃ³n en la plataforma (flecha roja)
             const arrowGeometry = new THREE.ConeGeometry(0.8, 2, 8);
             const arrowMaterial = new THREE.MeshPhongMaterial({
                 color: 0xff0000,
@@ -1507,7 +1507,7 @@
             arrow.position.set(CONFIG.baseRadius - 2, 1.5, 0);
             rotatingBase.add(arrow);
 
-            // Borde de la base con efecto metálico
+            // Borde de la base con efecto metÃ¡lico
             const edgeGeometry = new THREE.TorusGeometry(CONFIG.baseRadius, 0.3, 16, 64);
             const edgeMaterial = new THREE.MeshPhongMaterial({
                 color: 0x2c3e50,
@@ -1520,7 +1520,7 @@
             edge.position.y = 1;
             rotatingBase.add(edge);
 
-            // Área de escaneo (marcador visual)
+            // Ãrea de escaneo (marcador visual)
             const scanAreaGeometry = new THREE.RingGeometry(
                 CONFIG.scanAreaRadius * 0.9,
                 CONFIG.scanAreaRadius,
@@ -1540,7 +1540,7 @@
             scanArea.position.y = 1.3;
             rotatingBase.add(scanArea);
 
-            // Líneas divisorias en la base con mejor visualización
+            // LÃ­neas divisorias en la base con mejor visualizaciÃ³n
             for (let i = 0; i < 360; i += CONFIG.captureIncrement) {
                 const angle = (i * Math.PI) / 180;
                 const lineGeometry = new THREE.BufferGeometry().setFromPoints([
@@ -1577,7 +1577,7 @@
         }
 
         function createGuidingRail() {
-            // Rail guiador (arco de 1/4 de círculo VERTICAL)
+            // Rail guiador (arco de 1/4 de cÃ­rculo VERTICAL)
             const railGroup = new THREE.Group();
             
             // Elevar el rail 4cm para que quede por encima de la base rotatoria
@@ -1650,26 +1650,139 @@
 
             guidingRail = railGroup;
             scene.add(guidingRail);
+            
+            // BASE RECTANGULAR DE SOPORTE para el rail y el brazo
+            createSupportBase();
+        }
+
+        function createSupportBase() {
+            // Dimensiones de la base de soporte - AJUSTADAS
+            // La base rotatoria tiene radio 15cm, así que empezamos desde X > 15
+            const baseWidth = 14; // Ancho reducido (en X) para no chocar con base rotatoria
+            const baseDepth = 12; // Profundidad (en Z)
+            const baseHeight = 3; // Altura
+            
+            // Posición: desplazada hacia la derecha para no chocar con base rotatoria
+            // Comenzar desde X = 15 (borde de la base rotatoria) + margen
+            const baseStartX = CONFIG.baseRadius + 1; // 15 + 1 = 16cm desde el centro
+            const basePosX = baseStartX + (baseWidth / 2); // Centro de la base
+            const basePosY = baseHeight / 2; // Mitad de la altura para que esté sobre el suelo
+            const basePosZ = 0;
+            
+            // Geometría de la base principal (caja rectangular)
+            const baseGeometry = new THREE.BoxGeometry(baseWidth, baseHeight, baseDepth);
+            const baseMaterial = new THREE.MeshPhongMaterial({
+                color: 0x2c3e50,
+                shininess: 80,
+                metalness: 0.5
+            });
+            const supportBase = new THREE.Mesh(baseGeometry, baseMaterial);
+            supportBase.position.set(basePosX, basePosY, basePosZ);
+            supportBase.castShadow = true;
+            supportBase.receiveShadow = true;
+            scene.add(supportBase);
+            
+            // Borde superior decorativo
+            const topEdgeGeometry = new THREE.BoxGeometry(baseWidth + 0.5, 0.3, baseDepth + 0.5);
+            const topEdgeMaterial = new THREE.MeshPhongMaterial({
+                color: 0x34495e,
+                shininess: 100
+            });
+            const topEdge = new THREE.Mesh(topEdgeGeometry, topEdgeMaterial);
+            topEdge.position.set(basePosX, baseHeight + 0.15, basePosZ);
+            topEdge.castShadow = true;
+            scene.add(topEdge);
+            
+            // Patas de soporte (cilindros en las esquinas)
+            const legRadius = 0.8;
+            const legHeight = baseHeight * 0.8;
+            const legGeometry = new THREE.CylinderGeometry(legRadius, legRadius * 1.2, legHeight, 16);
+            const legMaterial = new THREE.MeshPhongMaterial({
+                color: 0x7f8c8d,
+                shininess: 70
+            });
+            
+            // Posiciones de las 4 patas
+            const legOffsetX = baseWidth / 2 - 2;
+            const legOffsetZ = baseDepth / 2 - 2;
+            const legPosY = legHeight / 2 + 0.1;
+            
+            const legPositions = [
+                [basePosX - legOffsetX, legPosY, basePosZ - legOffsetZ],
+                [basePosX + legOffsetX, legPosY, basePosZ - legOffsetZ],
+                [basePosX - legOffsetX, legPosY, basePosZ + legOffsetZ],
+                [basePosX + legOffsetX, legPosY, basePosZ + legOffsetZ]
+            ];
+            
+            legPositions.forEach(pos => {
+                const leg = new THREE.Mesh(legGeometry, legMaterial);
+                leg.position.set(pos[0], pos[1], pos[2]);
+                leg.castShadow = true;
+                scene.add(leg);
+            });
+            
+            // Placa de montaje para el brazo (donde se fija el brazo)
+            const mountingPlateGeometry = new THREE.CylinderGeometry(3, 3.5, 0.8, 16);
+            const mountingPlateMaterial = new THREE.MeshPhongMaterial({
+                color: 0x34495e,
+                shininess: 100,
+                metalness: 0.6
+            });
+            const mountingPlate = new THREE.Mesh(mountingPlateGeometry, mountingPlateMaterial);
+            mountingPlate.position.set(
+                CONFIG.railRadius + CONFIG.armBaseOffset, 
+                baseHeight + 0.4, 
+                0
+            );
+            mountingPlate.castShadow = true;
+            scene.add(mountingPlate);
+            
+            // Tornillos decorativos en la placa de montaje
+            const boltRadius = 0.2;
+            const boltHeight = 0.3;
+            const boltGeometry = new THREE.CylinderGeometry(boltRadius, boltRadius, boltHeight, 8);
+            const boltMaterial = new THREE.MeshPhongMaterial({
+                color: 0x95a5a6,
+                shininess: 150,
+                metalness: 0.8
+            });
+            
+            const boltPositions = [
+                [2, 0],
+                [-2, 0],
+                [0, 2],
+                [0, -2]
+            ];
+            
+            boltPositions.forEach(offset => {
+                const bolt = new THREE.Mesh(boltGeometry, boltMaterial);
+                bolt.position.set(
+                    CONFIG.railRadius + CONFIG.armBaseOffset + offset[0],
+                    baseHeight + 0.8,
+                    offset[1]
+                );
+                scene.add(bolt);
+            });
         }
 
         function createArticulatedArm() {
             // Grupo del brazo completo
             const armGroup = new THREE.Group();
 
-            // Base del brazo (articulación fija) - VERTICAL y 5cm atrás del rail
+            // Base del brazo (articulaciÃ³n fija) - VERTICAL y 5cm atrÃ¡s del rail
             const baseGeometry = new THREE.CylinderGeometry(1.5, 2, 2, 16);
             const baseMaterial = new THREE.MeshPhongMaterial({ 
                 color: 0x34495e,
                 shininess: 80
             });
             armBase = new THREE.Mesh(baseGeometry, baseMaterial);
-            armBase.name = "ARM_BASE"; // Nombre único
-            // Posicionar 5cm hacia atrás del rail y al nivel del rail (con offset de altura), centrado en Z=0
+            armBase.name = "ARM_BASE"; // Nombre Ãºnico
+            // Posicionar 5cm hacia atrÃ¡s del rail y al nivel del rail (con offset de altura), centrado en Z=0
             armBase.position.set(CONFIG.railRadius + CONFIG.armBaseOffset, CONFIG.railHeightOffset, 0);
             armBase.castShadow = true;
             scene.add(armBase);
 
-            // Eslabón 1 (Base-Codo) - VERTICAL
+            // EslabÃ³n 1 (Base-Codo) - VERTICAL
             const link1Geometry = new THREE.CylinderGeometry(0.8, 0.8, CONFIG.link1Length, 16);
             const link1Material = new THREE.MeshPhongMaterial({ 
                 color: 0x2ecc71,
@@ -1678,10 +1791,10 @@
                 emissiveIntensity: 0.1
             });
             link1 = new THREE.Mesh(link1Geometry, link1Material);
-            link1.name = "LINK_1"; // Nombre único
+            link1.name = "LINK_1"; // Nombre Ãºnico
             link1.castShadow = true;
             
-            // ARTICULACIÓN DEL CODO (ESFERA VISIBLE)
+            // ARTICULACIÃ“N DEL CODO (ESFERA VISIBLE)
             const elbowGeometry = new THREE.SphereGeometry(1.2, 32, 32);
             const elbowMaterial = new THREE.MeshPhongMaterial({ 
                 color: 0xe67e22,
@@ -1690,12 +1803,12 @@
                 emissiveIntensity: 0.2
             });
             elbowJoint = new THREE.Mesh(elbowGeometry, elbowMaterial);
-            elbowJoint.name = "ELBOW_JOINT"; // Nombre único
+            elbowJoint.name = "ELBOW_JOINT"; // Nombre Ãºnico
             elbowJoint.castShadow = true;
             elbowJoint.receiveShadow = true;
             scene.add(elbowJoint);
             
-            // Eslabón 2 (Codo-Cámara) - VERTICAL
+            // EslabÃ³n 2 (Codo-CÃ¡mara) - VERTICAL
             const link2Geometry = new THREE.CylinderGeometry(0.7, 0.7, CONFIG.link2Length, 16);
             const link2Material = new THREE.MeshPhongMaterial({ 
                 color: 0x3498db,
@@ -1704,10 +1817,10 @@
                 emissiveIntensity: 0.1
             });
             link2 = new THREE.Mesh(link2Geometry, link2Material);
-            link2.name = "LINK_2"; // Nombre único
+            link2.name = "LINK_2"; // Nombre Ãºnico
             link2.castShadow = true;
 
-            // Cabezal de la cámara
+            // Cabezal de la cÃ¡mara
             const cameraGeometry = new THREE.BoxGeometry(2.5, 2.5, 3);
             const cameraMaterial = new THREE.MeshPhongMaterial({ 
                 color: 0x1abc9c,
@@ -1716,10 +1829,10 @@
                 emissiveIntensity: 0.2
             });
             cameraHead = new THREE.Mesh(cameraGeometry, cameraMaterial);
-            cameraHead.name = "CAMERA_HEAD"; // Nombre único
+            cameraHead.name = "CAMERA_HEAD"; // Nombre Ãºnico
             cameraHead.castShadow = true;
 
-            // Lente de la cámara (apuntando hacia el área de escaneo)
+            // Lente de la cÃ¡mara (apuntando hacia el Ã¡rea de escaneo)
             const lensGeometry = new THREE.CylinderGeometry(0.8, 0.8, 0.5, 16);
             const lensMaterial = new THREE.MeshPhongMaterial({
                 color: 0x2c3e50,
@@ -1728,14 +1841,14 @@
                 shininess: 150
             });
             cameraLens = new THREE.Mesh(lensGeometry, lensMaterial);
-            cameraLens.name = "CAMERA_LENS"; // Nombre único para identificarlo
+            cameraLens.name = "CAMERA_LENS"; // Nombre Ãºnico para identificarlo
             cameraLens.rotation.z = Math.PI / 2; // Horizontal
-            cameraLens.position.x = 1.8; // Posición corregida para apuntar hacia el área de escaneo
+            cameraLens.position.x = 1.8; // PosiciÃ³n corregida para apuntar hacia el Ã¡rea de escaneo
             cameraHead.add(cameraLens);
 
-            // Luz en la cámara (indicador LED)
+            // Luz en la cÃ¡mara (indicador LED)
             const ledLight = new THREE.PointLight(0x00ffff, 0.5, 10);
-            ledLight.position.x = 2; // Ajustar también la posición de la luz
+            ledLight.position.x = 2; // Ajustar tambiÃ©n la posiciÃ³n de la luz
             cameraHead.add(ledLight);
 
             // Estructura del brazo
@@ -1781,17 +1894,17 @@
             customModel = null; // No hay modelo personalizado
         }
 
-        // Inicializar vista de cámara virtual
+        // Inicializar vista de cÃ¡mara virtual
         function initCameraView() {
-            // Crear cámara virtual que simulará la perspectiva del cabezal
+            // Crear cÃ¡mara virtual que simularÃ¡ la perspectiva del cabezal
             virtualCamera = new THREE.PerspectiveCamera(
-                75, // Campo de visión base
+                75, // Campo de visiÃ³n base
                 320 / 240, // Aspect ratio del canvas de vista
                 0.1,
                 100
             );
             
-            // Crear renderer para la vista de cámara
+            // Crear renderer para la vista de cÃ¡mara
             const cameraViewCanvas = document.getElementById('camera-view-canvas');
             cameraViewRenderer = new THREE.WebGLRenderer({ 
                 canvas: cameraViewCanvas,
@@ -1802,13 +1915,13 @@
             cameraViewRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
         }
 
-        // Función para actualizar el zoom de la cámara virtual
+        // FunciÃ³n para actualizar el zoom de la cÃ¡mara virtual
         function updateCameraZoom(zoomLevel) {
             if (!virtualCamera) return;
             
             cameraZoom = zoomLevel;
-            // Reducir el FOV para hacer zoom (FOV más pequeño = más zoom)
-            // FOV base es 75°, al hacer zoom 2x queremos FOV de 37.5°
+            // Reducir el FOV para hacer zoom (FOV mÃ¡s pequeÃ±o = mÃ¡s zoom)
+            // FOV base es 75Â°, al hacer zoom 2x queremos FOV de 37.5Â°
             virtualCamera.fov = 75 / zoomLevel;
             virtualCamera.updateProjectionMatrix();
             
@@ -1816,27 +1929,27 @@
             document.getElementById('camera-zoom-value').textContent = `${zoomLevel.toFixed(1)}x`;
         }
 
-        // Actualizar posición y orientación de la cámara virtual
+        // Actualizar posiciÃ³n y orientaciÃ³n de la cÃ¡mara virtual
         function updateVirtualCamera() {
             if (!cameraHead || !virtualCamera || !cameraLens) return;
             
-            // Obtener la posición mundial del lente (donde está la cámara)
+            // Obtener la posiciÃ³n mundial del lente (donde estÃ¡ la cÃ¡mara)
             const lensWorldPosition = new THREE.Vector3();
             cameraLens.getWorldPosition(lensWorldPosition);
             
-            // Posicionar la cámara virtual en el lente
+            // Posicionar la cÃ¡mara virtual en el lente
             virtualCamera.position.copy(lensWorldPosition);
             
-            // Obtener la rotación mundial del cabezal para orientar correctamente la cámara
+            // Obtener la rotaciÃ³n mundial del cabezal para orientar correctamente la cÃ¡mara
             const cameraWorldQuaternion = new THREE.Quaternion();
             cameraHead.getWorldQuaternion(cameraWorldQuaternion);
             virtualCamera.setRotationFromQuaternion(cameraWorldQuaternion);
             
-            // Ajustar la orientación para que apunte hacia adelante y esté correctamente orientada
-            virtualCamera.rotateY(-Math.PI / 2); // Apuntar en dirección X positiva
-            virtualCamera.rotateZ(Math.PI); // Corregir la inversión (de cabeza)
+            // Ajustar la orientaciÃ³n para que apunte hacia adelante y estÃ© correctamente orientada
+            virtualCamera.rotateY(-Math.PI / 2); // Apuntar en direcciÃ³n X positiva
+            virtualCamera.rotateZ(Math.PI); // Corregir la inversiÃ³n (de cabeza)
             
-            // Renderizar la vista de la cámara si está activa
+            // Renderizar la vista de la cÃ¡mara si estÃ¡ activa
             if (cameraViewActive && cameraViewRenderer) {
                 // Ocultar el lente temporalmente para que no bloquee la vista
                 const originalVisible = cameraLens.visible;
@@ -1850,7 +1963,7 @@
             }
         }
 
-        // Toggle de la vista de cámara
+        // Toggle de la vista de cÃ¡mara
         function toggleCameraView() {
             cameraViewActive = !cameraViewActive;
             const panel = document.getElementById('camera-view-panel');
@@ -1859,11 +1972,11 @@
             if (cameraViewActive) {
                 panel.classList.add('active');
                 btn.classList.add('active');
-                btn.textContent = '📹 Vista Activa';
+                btn.textContent = 'ðŸ“¹ Vista Activa';
             } else {
                 panel.classList.remove('active');
                 btn.classList.remove('active');
-                btn.textContent = '📹 Vista de Cámara';
+                btn.textContent = 'ðŸ“¹ Vista de CÃ¡mara';
             }
         }
 
@@ -1872,12 +1985,12 @@
             const levelAngle = CONFIG.railLevels[currentLevel - 1];
             const levelRad = (levelAngle * Math.PI) / 180;
 
-            // Posición objetivo en el rail (plano vertical XY) con offset de altura, centrado en Z
+            // PosiciÃ³n objetivo en el rail (plano vertical XY) con offset de altura, centrado en Z
             const targetX = CONFIG.railRadius * Math.cos(levelRad);
             const targetY = CONFIG.railRadius * Math.sin(levelRad) + CONFIG.railHeightOffset;
             const targetZ = 0; // Centrado en Z=0
 
-            // Posición de la base del brazo (5cm atrás del rail, al nivel del suelo + offset)
+            // PosiciÃ³n de la base del brazo (5cm atrÃ¡s del rail, al nivel del suelo + offset)
             const baseX = CONFIG.railRadius + CONFIG.armBaseOffset;
             const baseY = CONFIG.railHeightOffset; // Mismo nivel de altura que la base del rail
             const baseZ = 0; // Centrado en Z=0
@@ -1896,17 +2009,17 @@
                 return;
             }
 
-            // Verificar si la distancia es demasiado pequeña (evitar división por cero)
+            // Verificar si la distancia es demasiado pequeÃ±a (evitar divisiÃ³n por cero)
             if (distanceToTarget < 0.1) {
                 console.warn("Objetivo demasiado cerca de la base");
                 return;
             }
 
-            // Calcular ángulos usando cinemática inversa (en plano vertical)
+            // Calcular Ã¡ngulos usando cinemÃ¡tica inversa (en plano vertical)
             const angleToTarget = Math.atan2(dy, dx);
 
-            // Ley de cosenos para calcular ángulo del codo
-            // Agregar límite para evitar valores inválidos cuando los eslabones son iguales
+            // Ley de cosenos para calcular Ã¡ngulo del codo
+            // Agregar lÃ­mite para evitar valores invÃ¡lidos cuando los eslabones son iguales
             let cosElbow = (link1Len * link1Len + link2Len * link2Len - distanceToTarget * distanceToTarget) / 
                             (2 * link1Len * link2Len);
             
@@ -1914,7 +2027,7 @@
             cosElbow = Math.max(-0.999, Math.min(0.999, cosElbow));
             const elbowAngle = Math.acos(cosElbow);
 
-            // Calcular ángulo del hombro
+            // Calcular Ã¡ngulo del hombro
             let cosTheta = (link1Len * link1Len + distanceToTarget * distanceToTarget - link2Len * link2Len) / 
                             (2 * link1Len * distanceToTarget);
             
@@ -1923,9 +2036,9 @@
             const theta = Math.acos(cosTheta);
             const shoulderAngle = angleToTarget - theta;
 
-            // Verificar que los ángulos sean válidos
+            // Verificar que los Ã¡ngulos sean vÃ¡lidos
             if (isNaN(shoulderAngle) || isNaN(elbowAngle)) {
-                console.warn("Ángulos inválidos calculados");
+                console.warn("Ãngulos invÃ¡lidos calculados");
                 return;
             }
 
@@ -1938,7 +2051,7 @@
             targetArmPosition.link1.z = baseZ;
             targetArmPosition.link1.rotation = shoulderAngle - Math.PI / 2;
 
-            // Posición del codo
+            // PosiciÃ³n del codo
             const elbowX = baseX + Math.cos(shoulderAngle) * link1Len;
             const elbowY = baseY + Math.sin(shoulderAngle) * link1Len;
             
@@ -1946,7 +2059,7 @@
             targetArmPosition.elbow.y = elbowY;
             targetArmPosition.elbow.z = baseZ;
 
-            // Eslabón 2
+            // EslabÃ³n 2
             const link2Angle = shoulderAngle + (Math.PI - elbowAngle);
             const link2MidX = elbowX + Math.cos(link2Angle) * (link2Len / 2);
             const link2MidY = elbowY + Math.sin(link2Angle) * (link2Len / 2);
@@ -1956,7 +2069,7 @@
             targetArmPosition.link2.z = baseZ;
             targetArmPosition.link2.rotation = link2Angle - Math.PI / 2;
 
-            // Cámara
+            // CÃ¡mara
             targetArmPosition.camera.x = targetX;
             targetArmPosition.camera.y = targetY;
             targetArmPosition.camera.z = targetZ;
@@ -1964,13 +2077,13 @@
             const angleToCenterXY = Math.atan2(-targetY, -targetX);
             targetArmPosition.camera.rotation = angleToCenterXY;
 
-            // Actualizar display del ángulo del codo
+            // Actualizar display del Ã¡ngulo del codo
             const elbowAngleDeg = ((Math.PI - elbowAngle) * 180 / Math.PI);
             document.getElementById('elbow-angle-display').textContent = 
-                `${elbowAngleDeg.toFixed(1)}°`;
+                `${elbowAngleDeg.toFixed(1)}Â°`;
         }
 
-        // Nueva función para aplicar animaciones suaves
+        // Nueva funciÃ³n para aplicar animaciones suaves
         function applyArmAnimations() {
             const speed = CONFIG.animationSpeed;
 
@@ -2047,14 +2160,14 @@
             });
             const capturePoint = new THREE.Mesh(captureGeometry, captureMaterial);
             
-            // Posicionar en la ubicación de la cámara
+            // Posicionar en la ubicaciÃ³n de la cÃ¡mara
             if (cameraHead) {
                 capturePoint.position.copy(cameraHead.position);
-                capturePoint.isLine = false; // Marcar como punto, no línea
+                capturePoint.isLine = false; // Marcar como punto, no lÃ­nea
                 scene.add(capturePoint);
                 capturePoints.push(capturePoint);
 
-                // Línea desde la cámara hacia el centro
+                // LÃ­nea desde la cÃ¡mara hacia el centro
                 const lineGeometry = new THREE.BufferGeometry().setFromPoints([
                     cameraHead.position.clone(),
                     new THREE.Vector3(0, 2, 0)
@@ -2065,12 +2178,12 @@
                     opacity: 0.3
                 });
                 const line = new THREE.Line(lineGeometry, lineMaterial);
-                line.isLine = true; // Marcar como línea
+                line.isLine = true; // Marcar como lÃ­nea
                 scene.add(line);
                 capturePoints.push(line);
             }
 
-            // Mostrar indicador de captura con animación
+            // Mostrar indicador de captura con animaciÃ³n
             const indicator = document.getElementById('capture-indicator');
             indicator.style.display = 'block';
             indicator.style.animation = 'none';
@@ -2090,16 +2203,16 @@
             
             controls.update();
             
-            // Animación suave de rotación de la base
+            // AnimaciÃ³n suave de rotaciÃ³n de la base
             if (rotatingBase) {
-                // Interpolar la rotación actual hacia la rotación objetivo
+                // Interpolar la rotaciÃ³n actual hacia la rotaciÃ³n objetivo
                 targetBaseRotation = (CONFIG.currentBaseRotation * Math.PI) / 180;
                 currentBaseRotation = lerp(currentBaseRotation, targetBaseRotation, CONFIG.animationSpeed);
                 rotatingBase.rotation.y = currentBaseRotation;
                 
-                // Si no está simulando, rotar suavemente la base
+                // Si no estÃ¡ simulando, rotar suavemente la base
                 if (!isScanning && !isAutoMode) {
-                    // Pequeña rotación constante para mostrar que está activa
+                    // PequeÃ±a rotaciÃ³n constante para mostrar que estÃ¡ activa
                     const time = Date.now() * 0.0001;
                     rotatingBase.children.forEach(child => {
                         if (child.position.y > 1) { // Solo el objeto
@@ -2124,7 +2237,7 @@
                 }
             }
 
-            // Efecto de brillo en la cámara
+            // Efecto de brillo en la cÃ¡mara
             if (cameraHead && cameraHead.children[0]) {
                 const time = Date.now() * 0.001;
                 cameraHead.children[0].material.emissiveIntensity = 0.3 + Math.sin(time * 4) * 0.2;
@@ -2137,7 +2250,7 @@
                 const offset = index * 0.5;
                 point.position.y += Math.sin(time * 2 + offset) * 0.01;
                 
-                // Efecto de rotación
+                // Efecto de rotaciÃ³n
                 point.rotation.y += 0.02;
                 
                 // Pulso de escala
@@ -2148,7 +2261,7 @@
             // Actualizar info display
             updateInfoDisplay();
 
-            // Actualizar vista de cámara virtual
+            // Actualizar vista de cÃ¡mara virtual
             updateVirtualCamera();
 
             renderer.render(scene, camera);
@@ -2161,18 +2274,18 @@
             
             info.innerHTML = `
                 <strong>SISTEMA DE ESCANEO 3D</strong><br>
-                ────────────────────────────<br>
-                Nivel: ${level}/5 (${levelAngle}°)<br>
-                Rotación Base: ${CONFIG.currentBaseRotation.toFixed(1)}°<br>
-                Eslabón 1: ${CONFIG.link1Length} cm<br>
-                Eslabón 2: ${CONFIG.link2Length} cm<br>
+                â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€<br>
+                Nivel: ${level}/5 (${levelAngle}Â°)<br>
+                RotaciÃ³n Base: ${CONFIG.currentBaseRotation.toFixed(1)}Â°<br>
+                EslabÃ³n 1: ${CONFIG.link1Length} cm<br>
+                EslabÃ³n 2: ${CONFIG.link2Length} cm<br>
                 Capturas: ${totalCaptures}<br>
-                Modo: ${isAutoMode ? 'AUTOMÁTICO' : 'MANUAL'}
+                Modo: ${isAutoMode ? 'AUTOMÃTICO' : 'MANUAL'}
             `;
         }
 
         function setupEventListeners() {
-            // Modo manual/automático
+            // Modo manual/automÃ¡tico
             document.getElementById('manual-mode-btn').addEventListener('click', () => {
                 setMode('manual');
             });
@@ -2181,18 +2294,18 @@
                 setMode('auto');
             });
 
-            // Control de rotación base
+            // Control de rotaciÃ³n base
             document.getElementById('base-rotation').addEventListener('input', (e) => {
                 CONFIG.currentBaseRotation = parseFloat(e.target.value);
-                document.getElementById('base-rotation-value').textContent = `${CONFIG.currentBaseRotation}°`;
-                document.getElementById('current-base-angle').textContent = `${CONFIG.currentBaseRotation}°`;
+                document.getElementById('base-rotation-value').textContent = `${CONFIG.currentBaseRotation}Â°`;
+                document.getElementById('current-base-angle').textContent = `${CONFIG.currentBaseRotation}Â°`;
             });
 
             // Control de nivel del rail
             document.getElementById('rail-level').addEventListener('input', (e) => {
                 CONFIG.currentLevel = parseInt(e.target.value);
                 const angle = CONFIG.railLevels[CONFIG.currentLevel - 1];
-                document.getElementById('rail-level-value').textContent = `Nivel ${CONFIG.currentLevel} (${angle}°)`;
+                document.getElementById('rail-level-value').textContent = `Nivel ${CONFIG.currentLevel} (${angle}Â°)`;
                 document.getElementById('current-level').textContent = CONFIG.currentLevel;
                 updateArmPosition();
             });
@@ -2216,7 +2329,7 @@
                 if (isNaN(newLink1Length) || isNaN(newLink2Length) || 
                     newLink1Length < 10 || newLink2Length < 15 ||
                     newLink1Length > 25 || newLink2Length > 30) {
-                    alert('Por favor ingresa valores válidos:\n- Eslabón 1: 10-25 cm\n- Eslabón 2: 15-30 cm');
+                    alert('Por favor ingresa valores vÃ¡lidos:\n- EslabÃ³n 1: 10-25 cm\n- EslabÃ³n 2: 15-30 cm');
                     return;
                 }
                 
@@ -2224,11 +2337,11 @@
                 console.log('Eliminando eslabones antiguos...');
                 removeAllLinks();
                 
-                // Actualizar configuración
+                // Actualizar configuraciÃ³n
                 CONFIG.link1Length = newLink1Length;
                 CONFIG.link2Length = newLink2Length;
                 
-                // Esperar a que se complete la eliminación
+                // Esperar a que se complete la eliminaciÃ³n
                 setTimeout(() => {
                     console.log('Creando nuevos eslabones...');
                     
@@ -2259,7 +2372,7 @@
 
                     console.log('Nuevos eslabones creados:', link1, link2);
 
-                    // Recalcular posición con las nuevas longitudes
+                    // Recalcular posiciÃ³n con las nuevas longitudes
                     updateArmPosition();
                     
                     // Inicializar las posiciones actuales
@@ -2285,7 +2398,7 @@
                     // Aplicar posiciones inmediatamente
                     applyArmAnimations();
                     
-                    alert('✅ Longitudes actualizadas correctamente');
+                    alert('âœ… Longitudes actualizadas correctamente');
                 }, 150);
             });
 
@@ -2294,13 +2407,13 @@
                 capturePhoto();
             });
 
-            // Controles automáticos
+            // Controles automÃ¡ticos
             document.getElementById('start-scan-btn').addEventListener('click', startAutomaticScan);
             document.getElementById('pause-scan-btn').addEventListener('click', pauseScan);
             document.getElementById('resume-scan-btn').addEventListener('click', resumeScan);
             document.getElementById('stop-scan-btn').addEventListener('click', stopScan);
 
-            // Velocidad de simulación
+            // Velocidad de simulaciÃ³n
             document.getElementById('simulation-speed').addEventListener('change', (e) => {
                 CONFIG.simulationSpeed = parseFloat(e.target.value);
             });
@@ -2324,16 +2437,16 @@
             });
 
             document.getElementById('remove-model-btn').addEventListener('click', () => {
-                if (confirm('¿Deseas restaurar la taza original?')) {
+                if (confirm('Â¿Deseas restaurar la taza original?')) {
                     restoreOriginalObject();
                 }
             });
 
-            // Vista de cámara virtual
+            // Vista de cÃ¡mara virtual
             document.getElementById('toggle-camera-view-btn').addEventListener('click', toggleCameraView);
             document.getElementById('close-camera-view').addEventListener('click', toggleCameraView);
             
-            // Control de zoom de la cámara virtual
+            // Control de zoom de la cÃ¡mara virtual
             document.getElementById('camera-zoom-slider').addEventListener('input', (e) => {
                 const zoomLevel = parseFloat(e.target.value);
                 updateCameraZoom(zoomLevel);
@@ -2352,7 +2465,7 @@
             document.getElementById('manual-mode-btn').className = isAutoMode ? 'btn-secondary' : 'btn-primary';
             document.getElementById('auto-mode-btn').className = isAutoMode ? 'btn-primary' : 'btn-secondary';
             
-            document.getElementById('current-mode').textContent = isAutoMode ? 'Automático' : 'Manual';
+            document.getElementById('current-mode').textContent = isAutoMode ? 'AutomÃ¡tico' : 'Manual';
         }
 
         let scanInterval;
@@ -2379,7 +2492,7 @@
             CONFIG.currentBaseRotation = currentScanRotation;
             updateArmPosition();
             
-            // Inicializar posiciones actuales para animación suave desde el inicio
+            // Inicializar posiciones actuales para animaciÃ³n suave desde el inicio
             currentArmPosition.link1.x = targetArmPosition.link1.x;
             currentArmPosition.link1.y = targetArmPosition.link1.y;
             currentArmPosition.link1.z = targetArmPosition.link1.z;
@@ -2399,7 +2512,7 @@
             currentArmPosition.camera.z = targetArmPosition.camera.z;
             currentArmPosition.camera.rotation = targetArmPosition.camera.rotation;
             
-            // Resetear rotación de la base
+            // Resetear rotaciÃ³n de la base
             currentBaseRotation = 0;
             targetBaseRotation = 0;
             
@@ -2412,12 +2525,12 @@
         function performScan() {
             if (!isScanning || isPaused) return;
 
-            // Capturar foto en la posición actual
+            // Capturar foto en la posiciÃ³n actual
             CONFIG.currentBaseRotation = currentScanRotation;
             
-            // Esperar a que la animación llegue a la posición antes de capturar
+            // Esperar a que la animaciÃ³n llegue a la posiciÃ³n antes de capturar
             const rotDiff = Math.abs(currentBaseRotation - targetBaseRotation);
-            if (rotDiff < 0.1) { // Ya llegó a la posición
+            if (rotDiff < 0.1) { // Ya llegÃ³ a la posiciÃ³n
                 capturePhoto();
 
                 // Calcular progreso
@@ -2429,20 +2542,20 @@
 
                 // Actualizar displays
                 document.getElementById('current-level').textContent = currentScanLevel;
-                document.getElementById('current-base-angle').textContent = `${currentScanRotation}°`;
+                document.getElementById('current-base-angle').textContent = `${currentScanRotation}Â°`;
 
-                // Incrementar rotación para la siguiente captura
+                // Incrementar rotaciÃ³n para la siguiente captura
                 currentScanRotation += CONFIG.captureIncrement;
 
                 if (currentScanRotation >= 360) {
-                    // Completó una vuelta, pasar al siguiente nivel
+                    // CompletÃ³ una vuelta, pasar al siguiente nivel
                     currentScanRotation = 0;
                     currentScanLevel++;
 
                     if (currentScanLevel > 5) {
                         // Escaneo completo
                         stopScan();
-                        alert('¡Escaneo completado! Total de capturas: ' + totalCaptures);
+                        alert('Â¡Escaneo completado! Total de capturas: ' + totalCaptures);
                         return;
                     }
 
@@ -2450,7 +2563,7 @@
                     CONFIG.currentLevel = currentScanLevel;
                     updateArmPosition();
 
-                    // Pausa breve entre niveles para que se vea la transición
+                    // Pausa breve entre niveles para que se vea la transiciÃ³n
                     setTimeout(() => {
                         if (isScanning && !isPaused) {
                             performScan();
@@ -2465,7 +2578,7 @@
                     }, 800 / CONFIG.simulationSpeed);
                 }
             } else {
-                // Esperar a que termine la animación
+                // Esperar a que termine la animaciÃ³n
                 setTimeout(() => {
                     if (isScanning && !isPaused) {
                         performScan();
@@ -2503,10 +2616,10 @@
         }
 
         function resetSystem() {
-            // Detener escaneo si está activo
+            // Detener escaneo si estÃ¡ activo
             stopScan();
             
-            // Resetear configuración
+            // Resetear configuraciÃ³n
             CONFIG.currentLevel = 5;
             CONFIG.currentBaseRotation = 0;
             CONFIG.link1Length = 15;
@@ -2601,7 +2714,7 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
         }
 
-        // Iniciar aplicación
+        // Iniciar aplicaciÃ³n
         init();
     </script>
 </body>
